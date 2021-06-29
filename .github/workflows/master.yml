@@ -42,8 +42,9 @@ jobs:
           CHANNEL: "#team-p3-medlemskap-notifications"
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
   deploypreprod:
-    name: Deploy PR-branch to dev
-    needs: [ build-branch ]
+    name: Deploy branch to dev
+    needs: build
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       IMAGE: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
