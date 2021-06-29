@@ -33,6 +33,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Push docker image
         run: docker push $IMAGE
+      - name: Archive NAIS yaml
+          uses: actions/upload-artifact@v1
+          with:
+            name: nais-dev-yaml
+            path: deploy
       - name: Post failures to Slack
         if: failure()
         run: |
