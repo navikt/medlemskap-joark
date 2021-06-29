@@ -54,7 +54,6 @@ jobs:
         CLUSTER: dev-gcp
         RESOURCE: .nais/nais.yaml
         VAR: image=${{ env.IMAGE }}
-
   deployprod:
     name: Deploy to Prod
     needs: deploypreprod
@@ -65,6 +64,6 @@ jobs:
     - uses: nais/deploy/actions/deploy@v1
       env:
         APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-        CLUSTER: dev-gcp
+        CLUSTER: prod-gcp
         RESOURCE: .nais/nais.yaml
         VAR: image=${{ env.IMAGE }}
