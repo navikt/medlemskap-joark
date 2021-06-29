@@ -4,7 +4,7 @@ metadata:
   name: medlemskap-joark-listener
   namespace: medlemskap
   labels:
-    "team": medlemskap
+    team: medlemskap
 spec:
   azure:
     application:
