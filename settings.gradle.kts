@@ -1,4 +1,4 @@
-rootProject.name = "medlemslap-joark-lytter"
+rootProject.name = "medlemskap-joark-lytter"
 
 pluginManagement {
     repositories {

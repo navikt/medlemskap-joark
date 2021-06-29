@@ -1,2 +1,2 @@
 FROM navikt/java:15
-COPY build/libs/medlemslap-joark-lytter.jar app.jar
+COPY build/libs/medlemskap-joark-lytter.jar app.jar
