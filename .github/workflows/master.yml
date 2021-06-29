@@ -52,8 +52,8 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: deploy/nais.yaml
+          CLUSTER: dev-fss
+          RESOURCE: .nais/nais.yaml
       - name: Post failures to Slack
         if: failure()
         run: |
