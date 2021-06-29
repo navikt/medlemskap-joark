@@ -54,8 +54,9 @@ jobs:
         CLUSTER: dev-gcp
         RESOURCE: .nais/nais.yaml
         VAR: image=${{ env.IMAGE }}
+
   deployprod:
-    name: Deploy to Preprod
+    name: Deploy to Prod
     needs: deploypreprod
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
