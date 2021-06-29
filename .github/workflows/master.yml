@@ -33,11 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Push docker image
         run: docker push $IMAGE
-      - name: Archive NAIS yaml
-          uses: actions/upload-artifact@v1
-          with:
-            name: nais-dev-yaml
-            path: deploy
+
       - name: Post failures to Slack
         if: failure()
         run: |
@@ -54,12 +50,8 @@ jobs:
     env:
       IMAGE: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
     steps:
-      - name: Fetch NAIS yaml
-        uses: actions/download-artifact@v1
-        with:
-          name: nais-dev-yaml
-          path: deploy
-
+      - uses: actions/checkout@master
+      - name: "Deploy to Preprod-gcp"
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
