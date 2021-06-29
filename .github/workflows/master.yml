@@ -33,7 +33,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Push docker image
         run: docker push $IMAGE
-
       - name: Post failures to Slack
         if: failure()
         run: |
@@ -43,23 +42,26 @@ jobs:
           CHANNEL: "#team-p3-medlemskap-notifications"
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
   deploypreprod:
-    name: Deploy branch to dev
+    name: Deploy to Preprod
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    env:
-      IMAGE: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
     steps:
-      - uses: actions/checkout@master
-      - name: "Deploy to Preprod-gcp"
+      - uses: actions/checkout@v1
+        name: Checkout code
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml
-          VARS: .nais/vars.yaml
-          VAR: alerts_slack_channel=#team-p3-medlemskap-notifications
-          PRINT_PAYLOAD: true
+      - name: Post failures to Slack
+        if: failure()
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":ghost:\"}" $WEBHOOK_URL
+        env:
+          MESSAGE: "Deploy til preprod feilet"
+          CHANNEL: "#team-p3-medlemskap-notifications"
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
   deployprod:
     name: Deploy to Prod
     needs: deploypreprod
