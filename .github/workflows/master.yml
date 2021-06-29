@@ -3,7 +3,7 @@ name: Build, push, and deploy
 on: [push]
 
 env:
-  docker_image: ghcr.io/navikt/medlemskap-joark:${{ github.sha }}
+  docker_image: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
 
 jobs:
 
