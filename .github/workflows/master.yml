@@ -1,35 +1,86 @@
-name: Build, push, and deploy
+name: build
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 env:
   docker_image: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
-
 jobs:
-
   build:
-    name: Build and push Docker container
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Build and publish Docker image
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: test and build
+        run: ./gradlew test shadowJar
+        env:
+          ORG_GRADLE_PROJECT_githubUser: x-access-token
+          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build docker image
+        run: docker build -t $IMAGE .
+      - name: Login to Github package registry
+        run: docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push docker image
+        run: docker push $IMAGE
+      - name: Post failures to Slack
+        if: failure()
         run: |
-          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
-          docker build --tag ${docker_image} .
-          docker push ${docker_image}
-
-  deploy:
-    name: Deploy to NAIS
+          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":ghost:\"}" $WEBHOOK_URL
+        env:
+          MESSAGE: "Bygg feilet"
+          CHANNEL: "#team-p3-medlemskap-notifications"
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+  deploypreprod:
+    name: Deploy to Preprod
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+        name: Checkout code
       - uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yml
+          RESOURCE: .nais/nais.yaml
           VAR: image=${{ env.docker_image }}
+      - name: Post failures to Slack
+        if: failure()
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":ghost:\"}" $WEBHOOK_URL
+        env:
+          MESSAGE: "Deploy til preprod feilet"
+          CHANNEL: "#team-p3-medlemskap-notifications"
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+  deployprod:
+    name: Deploy to Prod
+    needs: deploypreprod
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        name: Checkout code
+      - uses: nais/deploy/actions/deploy@master
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
+          CLUSTER: prod-fss
+          RESOURCE: deploy/prod.yaml
+      - name: Post failures to Slack
+        if: failure()
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":ghost:\"}" $WEBHOOK_URL
+        env:
+          MESSAGE: "Deploy til prod feilet"
+          CHANNEL: "#team-p3-medlemskap-notifications"
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
