@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/medlemskap-joark:${{ github.sha }}
