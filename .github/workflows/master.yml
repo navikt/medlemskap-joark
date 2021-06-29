@@ -47,6 +47,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name : Echo
+        run : echo ${{ secrets.NAIS_DEPLOY_API_KEY }}
       - uses: actions/checkout@v1
         name: Checkout code
       - uses: nais/deploy/actions/deploy@v1
