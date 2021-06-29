@@ -39,8 +39,6 @@ spec:
   kafka:
     pool: nav-dev
   accessPolicy:
-    inbound:
-      rules:
     outbound:
       external:
         - host: api-gw-q1.oera.no
