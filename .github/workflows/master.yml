@@ -55,23 +55,15 @@ jobs:
         RESOURCE: .nais/nais.yaml
         VAR: image=${{ env.IMAGE }}
   deployprod:
-    name: Deploy to Prod
-    needs: deploypreprod
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-      name: Checkout code
-    - uses: nais/deploy/actions/deploy@master
-      env:
-        APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
-        CLUSTER: prod-fss
-        RESOURCE: deploy/prod.yaml
-    - name: Post failures to Slack
-      if: failure()
-      run: |
-        curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":ghost:\"}" $WEBHOOK_URL
-      env:
-        MESSAGE: "Deploy til prod feilet"
-        CHANNEL: "#team-p3-medlemskap-notifications"
-        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+    name: Deploy to Preprod
+      needs: deploypreprod
+      if: github.ref == 'refs/heads/master'
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v1
+        - uses: nais/deploy/actions/deploy@v1
+          env:
+            APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+            CLUSTER: dev-gcp
+            RESOURCE: .nais/nais.yaml
+            VAR: image=${{ env.IMAGE }}
