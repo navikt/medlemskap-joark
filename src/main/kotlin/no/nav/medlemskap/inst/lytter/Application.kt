@@ -1,10 +1,8 @@
-package no.nav.pensjon.inst.lytter
+package no.nav.medlemskap.inst.lytter
 
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
-import no.nav.medlemskap.inst.lytter.Consumer
-import no.nav.medlemskap.inst.lytter.naisLiveness
 import no.nav.medlemskap.inst.lytter.config.Environment
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
