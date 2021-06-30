@@ -1,6 +1,7 @@
 val ktorVersion = "1.6.0"
 val konfigVersion = "1.6.10.0"
 val kotlinLoggerVersion = "1.8.3"
+val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
     kotlin("jvm") version "1.5.10"
@@ -49,9 +50,16 @@ tasks {
         kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
     shadowJar {
-        archiveBaseName.set(rootProject.name)
+        archiveBaseName.set("app")
         archiveClassifier.set("")
         archiveVersion.set("")
+        manifest {
+            attributes(
+                mapOf(
+                    "Main-Class" to mainClass
+                )
+            )
+        }
     }
 
     test {
