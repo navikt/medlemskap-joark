@@ -27,7 +27,6 @@ spec:
   prometheus:
     enabled: true
     path: "/metrics"
-    port: 8080
   limits:
     cpu: "200m"
     memory: "256Mi"
