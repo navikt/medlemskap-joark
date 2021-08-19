@@ -35,9 +35,9 @@ private val defaultProperties = ConfigurationMap(
         "EREG_API_KEY" to "",
         "UDI_BASE_URL" to "",
         "KAFKA_BROKERS" to "nav-dev-kafka-nav-dev.aivencloud.com:26484",
-        "KAFKA_TRUSTSTORE_PATH" to "c:\\dev\\secrets\\client.truststore.jks",
+        "KAFKA_TRUSTSTORE_PATH" to "/Users/stians.douzette/Downloads/secrets/client.truststore.jks",
         "KAFKA_CREDSTORE_PASSWORD" to "changeme",
-        "KAFKA_KEYSTORE_PATH" to "c:\\dev\\secrets\\client.keystore.p12",
+        "KAFKA_KEYSTORE_PATH" to "/Users/stians.douzette/Downloads/secrets/client.keystore.p12",
         "KAFKA_CREDSTORE_PASSWORD" to "changeme"
     )
 )
@@ -107,11 +107,11 @@ data class Configuration(
         val bootstrapServers: String = "KAFKA_BROKERS".configProperty(),
         val securityProtocol: String = "SSL",
         val trustStorePath: String = "KAFKA_TRUSTSTORE_PATH".configProperty(),
-        val groupID: String = "medlemskap-oppslag",
+        val groupID: String = "medlemskap-joark-lytter",
         val trustStorePassword: String = "KAFKA_CREDSTORE_PASSWORD".configProperty(),
         val keystoreType: String = "PKCS12",
         val keystoreLocation: String = "KAFKA_KEYSTORE_PATH".configProperty(),
         val keystorePassword: String = "KAFKA_CREDSTORE_PASSWORD".configProperty(),
-        val topic : String =  "medlemskap.test-lovme-heartbeat"
+        val topic : String =  "medlemskap.medlemskap-vurdert"
     )
 }
