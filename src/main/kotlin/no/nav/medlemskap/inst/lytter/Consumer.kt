@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.time.delay
+import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.config.KafkaConfig
 import no.nav.medlemskap.inst.lytter.config.Environment
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -15,6 +16,10 @@ class Consumer(
 
     private val consumer: KafkaConsumer<String, String> = config.createConsumer(),
 ) {
+    companion object {
+        private val log = KotlinLogging.logger { }
+
+    }
 
     init {
         consumer.subscribe(listOf(config.topic))
@@ -42,8 +47,10 @@ class Consumer(
                 delay(Duration.ofSeconds(5))
             }
         }.onEach {
-            println("receiced :"+ it.size)
-            it.forEach { println(it) }
+            println("received: " + it.size)
+            it.forEach { record ->
+                log.info { "motatt melding: $record" }
+            }
         }.onEach {
             consumer.commitAsync()
         }.onEach {
