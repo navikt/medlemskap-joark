@@ -12,6 +12,7 @@ import io.prometheus.client.exporter.common.TextFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
+import no.nav.medlemskap.inst.lytter.config.Environment
 import java.io.Writer
 
 fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvironment {
@@ -37,6 +38,9 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                 call.respondTextWriter(ContentType.parse(TextFormat.CONTENT_TYPE_004)) {
                     writeMetrics004(this, Metrics.registry)
                 }
+            }
+            get("/health") {
+                val pdfgenClient = PdfGeneratorClient(Environment.)
             }
         }
     }

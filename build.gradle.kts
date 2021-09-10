@@ -1,6 +1,8 @@
 val ktorVersion = "1.6.0"
 val konfigVersion = "1.6.10.0"
+val jacksonVersion = "2.10.5"
 val kotlinLoggerVersion = "1.8.3"
+val resilience4jVersion = "1.5.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
@@ -24,6 +26,9 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("io.github.resilience4j:resilience4j-retry:$resilience4jVersion")
+    implementation("io.github.resilience4j:resilience4j-kotlin:$resilience4jVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")

@@ -72,6 +72,7 @@ data class Configuration(
     val commitSha: String = hentCommitSha("NAIS_APP_IMAGE".configProperty())
 ) {
     data class Register(
+        val pdfGenBaseUrl: String = "PDF_GEN_BASE_URL".configProperty()
         val medl2BaseUrl: String = "MEDL2_BASE_URL".configProperty(),
         val medl2ApiKey: String = "MEDL2_API_KEY".configProperty(),
         val aaRegBaseUrl: String = "AAREG_BASE_URL".configProperty(),
