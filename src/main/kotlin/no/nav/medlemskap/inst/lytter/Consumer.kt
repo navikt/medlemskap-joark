@@ -5,31 +5,38 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.time.delay
 import mu.KotlinLogging
+import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.config.KafkaConfig
 import no.nav.medlemskap.inst.lytter.config.Environment
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import no.nav.medlemskap.inst.lytter.service.JoarkService
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 
 class Consumer(
     environment: Environment,
     private val config: KafkaConfig = KafkaConfig(environment),
-
     private val consumer: KafkaConsumer<String, String> = config.createConsumer(),
 ) {
     companion object {
         private val log = KotlinLogging.logger { }
 
     }
-
+    val joarkService = JoarkService(Configuration())
     init {
         consumer.subscribe(listOf(config.topic))
     }
 
-    fun pollMessages(): List<String> = //listOf("Message A","Message B","Message C")
+    fun pollMessages(): List<MedlemskapVurdertRecord> = //listOf("Message A","Message B","Message C")
 
         consumer.poll(Duration.ofSeconds(4))
-            .map { it.value() }
-            .map { it.toString() }
+            .map { MedlemskapVurdertRecord(it.partition(),
+                it.offset(),
+                it.value(),
+                it.key(),
+                it.topic(),
+                it.value())
+            }
             .also {
                 //Metrics.incReceivedTotal(it.count())
                 //it.forEach { hendelse ->
@@ -40,7 +47,7 @@ class Consumer(
 
             //.filter { it.kilde == Hendelse.Kilde.KDI }
 
-    fun flow(): Flow<List<String>> =
+    fun flow(): Flow<List<MedlemskapVurdertRecord>> =
         flow {
             while (true) {
                 emit(pollMessages())
@@ -49,7 +56,7 @@ class Consumer(
         }.onEach {
             println("received: " + it.size)
             it.forEach { record ->
-                log.info { "motatt melding: $record" }
+                joarkService.handle(record)
             }
         }.onEach {
             consumer.commitAsync()

@@ -10,9 +10,15 @@ import io.ktor.server.netty.*
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
+import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
+import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.config.Environment
+import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
+import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
+import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.io.Writer
 
 fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvironment {
@@ -25,10 +31,15 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
 
         routing {
             get("/isAlive") {
+
+
+                val pdfHealth = callPdfGen()
+                val consumejobHealth = getConsuejobHealth(consumeJob)
+                val health = Health(listOf(pdfHealth,consumejobHealth))
                 if (consumeJob.isActive) {
-                    call.respondText("Alive!", ContentType.Text.Plain, HttpStatusCode.OK)
+                    call.respondText(JaksonParser().ToJson(health).toPrettyString(), ContentType.Text.Plain, HttpStatusCode.OK)
                 } else {
-                    call.respondText("Not alive :(", ContentType.Text.Plain, HttpStatusCode.InternalServerError)
+                    call.respondText(JaksonParser().ToJson(health).toPrettyString(), ContentType.Text.Plain, HttpStatusCode.InternalServerError)
                 }
             }
             get("/isReady") {
@@ -39,12 +50,44 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                     writeMetrics004(this, Metrics.registry)
                 }
             }
-            get("/health") {
-                val pdfgenClient = PdfGeneratorClient(Environment.)
-            }
         }
     }
 })
+
+fun getConsuejobHealth(consumeJob: Job): Componenthealth {
+    return if (consumeJob.isActive){
+        Componenthealth(Status.UP,"consumeJob",Configuration().kafkaConfig.bootstrapServers,"")
+    }
+    else{
+        Componenthealth(Status.DOWN,"consumeJob",Configuration().kafkaConfig.bootstrapServers,"")
+    }
+
+}
+
+suspend fun callPdfGen(): Componenthealth {
+    val pdfClient = RestClientsImpl(Configuration()).pdfGen(Configuration().register.pdfGenBaseUrl)
+    val json = JaksonParser().ToJson(
+        PdfService.JaResponse(
+            "13:23:07 30.08.2021",
+            "12345678901",
+            "01.08.2021",
+            "22.08.2021",
+            "Kari Nordlending",
+            true,
+            true,
+            MedlemskapVurdering.Ja
+        )
+    )
+    return try{
+        val response = pdfClient.kallPDFGenerator("",MedlemskapVurdering.Ja,json.toPrettyString())
+        return Componenthealth(Status.UP,"PDF-GEN",Configuration().register.pdfGenBaseUrl,"")
+    }
+    catch (exception:Exception){
+        return Componenthealth(Status.DOWN,"PDF-GEN",Configuration().register.pdfGenBaseUrl,"Error: "+exception.message)
+    }
+
+}
+
 
 suspend fun writeMetrics004(writer: Writer, registry: PrometheusMeterRegistry) {
     withContext(Dispatchers.IO) {

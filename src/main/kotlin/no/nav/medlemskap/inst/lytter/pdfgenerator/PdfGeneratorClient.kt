@@ -1,4 +1,4 @@
-package no.nav.medlemskap.inst.lytter.`pdf-generator`
+package no.nav.medlemskap.inst.lytter.pdfgenerator
 
 import io.github.resilience4j.retry.Retry
 import io.ktor.client.*
@@ -12,8 +12,8 @@ class PdfGeneratorClient(
     private val retry: Retry? = null
 ) {
 
-    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: MedlemskapVurdering, json: String): String {
-        return runWithRetryAndMetrics("MEDL-OPPSLAG", "vurdermedlemskap", retry) {
+    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: MedlemskapVurdering, json: String): ByteArray {
+        return runWithRetryAndMetrics("MEDL-OPPSLAG-PDFGEN", "vurdermedlemskap", retry) {
             httpClient.post {
                 url("${baseUrl}${medlemskapVurdering.url}")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
