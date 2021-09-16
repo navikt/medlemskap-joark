@@ -10,12 +10,10 @@ import io.ktor.server.netty.*
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
-import no.nav.medlemskap.inst.lytter.config.Environment
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
@@ -75,11 +73,11 @@ suspend fun callPdfGen(): Componenthealth {
             "Kari Nordlending",
             true,
             true,
-            MedlemskapVurdering.Ja
+            MedlemskapVurdering.JA
         )
     )
     return try{
-        val response = pdfClient.kallPDFGenerator("",MedlemskapVurdering.Ja,json.toPrettyString())
+        val response = pdfClient.kallPDFGenerator("",MedlemskapVurdering.JA,json.toPrettyString())
         return Componenthealth(Status.UP,"PDF-GEN",Configuration().register.pdfGenBaseUrl,"")
     }
     catch (exception:Exception){

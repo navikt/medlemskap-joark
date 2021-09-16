@@ -7,11 +7,13 @@ class JoarkServiceTest {
 
     @Test
     fun `mapping til request objekt for status Ja`(){
-        val fileContent = this::class.java.classLoader.getResource("JaVurdering.json").readText(Charsets.UTF_8)
-        val node = JaksonParser().parse(fileContent)
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
-        val request = pdfService.mapRecordToRequest(node)
-        Assertions.assertTrue(request.get("medlemskapVurdering").asText().equals("Ja"))
+        val request = pdfService.mapRecordToRequest(fileContent)
+        Assertions.assertTrue(request.get("erTredjelandsborger").asBoolean())
+        Assertions.assertFalse(request.get("erNorskStatsborger").asBoolean())
+        Assertions.assertTrue(request.get("medlemskapVurdering").asText().equals("JA"))
+
         Assertions.assertNotNull(request)
     }
 }

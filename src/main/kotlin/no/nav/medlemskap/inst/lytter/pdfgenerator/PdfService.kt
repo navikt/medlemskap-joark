@@ -6,6 +6,7 @@ import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import java.time.LocalDate
 
 class PdfService()
 {
@@ -17,25 +18,30 @@ class PdfService()
 
     suspend fun opprettPfd(record: MedlemskapVurdertRecord):ByteArray{
 
-        val json = mapRecordToRequest(JaksonParser().parse(record.json))
-        val status = getStatusFromJson(json)
-        val response = pdfClient.kallPDFGenerator(record.key,status,json.toPrettyString())
+        val pdfRequest = mapRecordToRequest(record.json)
+        val status = getStatusFromJson(pdfRequest)
+        val response = pdfClient.kallPDFGenerator(record.key,status,pdfRequest.toPrettyString())
         return response
     }
 
     private fun getStatusFromJson(json: JsonNode): MedlemskapVurdering {
-    return MedlemskapVurdering.Ja
+    return MedlemskapVurdering.JA
     }
 
-    fun mapRecordToRequest(json:JsonNode):JsonNode{
-        val tidspunkt = json.get("tidspunkt").asText()
-        val resultat = json.get("resultat")
-        val datagrunnlag = json.get("datagrunnlag")
-        val fom = datagrunnlag.get("periode").get("fom").asText()
-        val tom = datagrunnlag.get("periode").get("tom").asText()
+    fun mapRecordToRequest(json:String):JsonNode{
 
-
-        return JaksonParser().ToJson(JaResponse(tidspunkt,"12345678901",fom,tom,"Kari Nordlending",true,true,MedlemskapVurdering.Ja))
+        val medlemskapVurdering = JaksonParser().parseToObject(json)
+        return JaksonParser().ToJson(
+            JaResponse(
+                LocalDate.now().toString(),
+                "12345678901", //TODO: få in fnr i grunnlag
+                medlemskapVurdering.datagrunnlag.periode.fom.toString(),
+                medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                "Kari Nordlending", //TODO: få in navn i grunnlag
+                medlemskapVurdering.erNorskStatsborger,
+                medlemskapVurdering.erTredjelandsBorger,
+                MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar))
+        )
     }
 
     interface Response{
