@@ -49,7 +49,7 @@ data class Resultat(
             return regelResultat
         }
 
-        fun finnDelresultat(resultat: Resultat, regelId: String): Resultat? {
+        private fun finnDelresultat(resultat: Resultat, regelId: String): Resultat? {
             return resultat.delresultat.find { it.regelId == regelId }
         }
 
