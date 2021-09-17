@@ -11,4 +11,22 @@ class JaksonMapperTest {
         Assertions.assertNotNull(parsed)
     }
 
+    @Test
+    fun `regler kjørt skal finnes i søk`(){
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
+        val parsed = JaksonParser().parseToObject(fileContent)
+        Assertions.assertNotNull(parsed)
+        Assertions.assertTrue(parsed.finnRegelResultat("REGEL_10")?.svar=="JA")
+    }
+    @Test
+    fun `ikke kjørte regler skal ikke feile ved søk`(){
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
+        val parsed = JaksonParser().parseToObject(fileContent)
+        Assertions.assertNotNull(parsed)
+        Assertions.assertFalse(parsed.finnRegelResultat("REGEL_109")?.svar=="TRUE")
+    }
+
+
+
+
 }

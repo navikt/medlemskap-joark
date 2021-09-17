@@ -10,7 +10,6 @@ class JoarkServiceTest {
         val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
         val jaRequest = pdfService.mapRecordToRequestObject(fileContent)
-        println(jaRequest.toJsonPrettyString())
         Assertions.assertTrue(jaRequest is PdfService.JaResponse)
         if (jaRequest is PdfService.JaResponse){
             Assertions.assertTrue(jaRequest.erTredjelandsborger)

@@ -25,7 +25,7 @@ class PdfService()
         val medlemskapVurdering = JaksonParser().parseToObject(json)
         if (medlemskapVurdering.resultat.svar=="JA"){
             return JaResponse(
-                LocalDate.now().toString(),
+                medlemskapVurdering.tidspunkt,
                 "12345678901", //TODO: få in fnr i grunnlag
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
