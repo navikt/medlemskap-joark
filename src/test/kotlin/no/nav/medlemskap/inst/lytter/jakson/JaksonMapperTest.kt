@@ -10,4 +10,5 @@ class JaksonMapperTest {
         val parsed = JaksonParser().parseToObject(fileContent)
         Assertions.assertNotNull(parsed)
     }
+
 }

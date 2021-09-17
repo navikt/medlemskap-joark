@@ -1,7 +1,5 @@
 package no.nav.medlemskap.inst.lytter.pdfgenerator
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
@@ -17,22 +15,16 @@ class PdfService()
     private val pdfClient = restClients.pdfGen(configuration.register.pdfGenBaseUrl)
 
     suspend fun opprettPfd(record: MedlemskapVurdertRecord):ByteArray{
-
-        val pdfRequest = mapRecordToRequest(record.json)
-        val status = getStatusFromJson(pdfRequest)
-        val response = pdfClient.kallPDFGenerator(record.key,status,pdfRequest.toPrettyString())
+        val pdfRequest = mapRecordToRequestObject(record.json)
+        val response = pdfClient.kallPDFGenerator(record.key,pdfRequest.getstatus(),pdfRequest.toJsonPrettyString())
         return response
     }
 
-    private fun getStatusFromJson(json: JsonNode): MedlemskapVurdering {
-    return MedlemskapVurdering.JA
-    }
-
-    fun mapRecordToRequest(json:String):JsonNode{
+    fun mapRecordToRequestObject(json: String): Response {
 
         val medlemskapVurdering = JaksonParser().parseToObject(json)
-        return JaksonParser().ToJson(
-            JaResponse(
+        if (medlemskapVurdering.resultat.svar=="JA"){
+            return JaResponse(
                 LocalDate.now().toString(),
                 "12345678901", //TODO: få in fnr i grunnlag
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
@@ -40,12 +32,19 @@ class PdfService()
                 "Kari Nordlending", //TODO: få in navn i grunnlag
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
-                MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar))
-        )
+                MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
+            )
+
+            }
+            else{
+            return UavklartResponse()
+        }
+
     }
 
     interface Response{
         fun getstatus():MedlemskapVurdering
+        fun toJsonPrettyString():String
 
     }
 
@@ -63,16 +62,18 @@ class PdfService()
             return medlemskapVurdering
         }
 
-    }
-    class NeiResponse(): Response {
-        override fun getstatus(): MedlemskapVurdering {
-            TODO("Not yet implemented")
+        override fun toJsonPrettyString(): String {
+            return JaksonParser().ToJson(this).toPrettyString()
         }
 
     }
     class UavklartResponse(): Response {
         override fun getstatus(): MedlemskapVurdering {
-            TODO("Not yet implemented")
+            return MedlemskapVurdering.UAVKLART
+        }
+
+        override fun toJsonPrettyString(): String {
+            return JaksonParser().ToJson(this).toPrettyString()
         }
 
     }
