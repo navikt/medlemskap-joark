@@ -9,10 +9,17 @@ private val logger = KotlinLogging.logger { }
 
 private val defaultProperties = ConfigurationMap(
     mapOf(
+        "AZURE_APP_WELL_KNOWN_URL" to "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration",
+        "AZURE_TENANT" to "966ac572-f5b7-4bbe-aa88-c76419c0f851",
+        "AZURE_AUTHORITY_ENDPOINT" to "https://login.microsoftonline.com",
+        "AZURE_OPENID_CONFIG_TOKEN_ENDPOINT" to "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token",
         "AZURE_TENANT" to "",
         "AZURE_AUTHORITY_ENDPOINT" to "",
         "SERVICE_USER_USERNAME" to "test",
         "PDF_GEN_BASE_URL" to "https://medlemskap-oppslag-pdfgen.dev.intern.nav.no",
+        "JOARK_BASE_URL" to "https://dokarkiv-q1.dev.intern.nav.no",
+        "JOARK_CLIENT_ID" to "972814f3-8bdf-44f8-a191-c2ed00020b54",
+        "AZURE_APP_CLIENT_SECRET" to "EP1ta~LYQ1jn~zv7C7IO.I~bQ3.IfLvoPk",
         "SECURITY_TOKEN_SERVICE_URL" to "",
         "SECURITY_TOKEN_SERVICE_REST_URL" to "",
         "SECURITY_TOKEN_SERVICE_API_KEY" to "",
@@ -20,7 +27,7 @@ private val defaultProperties = ConfigurationMap(
         "NAIS_APP_NAME" to "",
         "NAIS_CLUSTER_NAME" to "",
         "NAIS_APP_IMAGE" to "",
-        "AZURE_APP_CLIENT_ID" to "",
+        "AZURE_APP_CLIENT_ID" to "f934ccb1-e811-4a26-9b7f-a9b66c928d2c",
         "KAFKA_BROKERS" to "nav-dev-kafka-nav-dev.aivencloud.com:26484",
         "KAFKA_TRUSTSTORE_PATH" to "c:\\dev\\secrets\\client.truststore.jks",
         "KAFKA_CREDSTORE_PASSWORD" to "changeme",
@@ -53,11 +60,21 @@ private fun hentCommitSha(image: String): String {
 data class Configuration(
     val register: Register = Register(),
     val kafkaConfig: KafkaConfig = KafkaConfig(),
+    val azureAd: AzureAd = AzureAd(),
     val cluster: String = "NAIS_CLUSTER_NAME".configProperty(),
     val commitSha: String = hentCommitSha("NAIS_APP_IMAGE".configProperty())
 ) {
     data class Register(
         val pdfGenBaseUrl: String = "PDF_GEN_BASE_URL".configProperty(),
+        val joarkBaseUrl: String = "JOARK_BASE_URL".configProperty(),
+        val joarkClientId: String = "JOARK_CLIENT_ID".configProperty(),
+    )
+    data class AzureAd(
+        val clientId: String = "AZURE_APP_CLIENT_ID".configProperty(),
+        val clientSecret: String = "AZURE_APP_CLIENT_SECRET".configProperty(),
+        val jwtAudience: String = "AZURE_APP_CLIENT_ID".configProperty(),
+        val tokenEndpoint: String = "AZURE_OPENID_CONFIG_TOKEN_ENDPOINT".configProperty().removeSuffix("/"),
+        val azureAppWellKnownUrl: String = "AZURE_APP_WELL_KNOWN_URL".configProperty().removeSuffix("/")
     )
 
     data class KafkaConfig(

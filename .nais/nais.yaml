@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: medlemskap-joark-listener
+    name: medlemskap-joark-listener
   namespace: medlemskap
   labels:
     team: medlemskap
@@ -44,6 +44,7 @@ spec:
         - host: api-gw-q2.oera.no
         - host: saf.dev-fss-pub.nais.io
         - host: login.microsoftonline.com
+        - host: dokarkiv.dev-fss-pub.nais.io
   env:
     - name: PDF_GEN_BASE_URL
       value: https://medlemskap-oppslag-pdfgen.dev.intern.nav.no
@@ -55,3 +56,7 @@ spec:
       value: https://api-gw-q1.oera.no/sts/SecurityTokenServiceProvider/
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://api-gw-q1.oera.no/security-token-service
+    - name : JOARK_CLIENT_ID
+      value: 972814f3-8bdf-44f8-a191-c2ed00020b54
+    - name: JOARK_BASE_URL
+      value: https://dokarkiv-q1.dev.intern.nav.no

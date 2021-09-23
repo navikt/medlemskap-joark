@@ -1,0 +1,80 @@
+package no.nav.medlemskap.inst.lytter.journalpost
+
+import com.fasterxml.jackson.databind.JsonNode
+import io.ktor.client.features.*
+import mu.KotlinLogging
+import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
+import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import java.util.*
+
+class JournalpostService() {
+    val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr "
+    val dokumentnavnNEI = "Automatisk vurdering: Er unntatt fra medlemskap i folketrygden pr  "
+    val dokumentnavnUAVKLART = "Automatisk vurdert til «Uavklart»: Medlemskapet i folketrygden pr %dato kan ikke vurderes automatisk"
+    val tema = "Medlemskap"
+    val behandlingstema = ""
+    val kanal = ""
+    val configuration = Configuration()
+    val restClients = RestClientsImpl(
+        configuration = configuration
+    )
+    companion object {
+        private val log = KotlinLogging.logger { }
+
+    }
+    val joarkClient = restClients.joarkClient(configuration.register.joarkBaseUrl)
+
+    suspend fun lagrePdfTilJoark(callId:String,journalpostRequest: JournalpostRequest):JsonNode?{
+        try{
+            println("callID: $callId")
+            val response = joarkClient.journalfoerDok(callId,journalpostRequest)
+            val journalpostId = response.get("journalpostId").asText()
+            val ferdigstilt = response.get("journalpostferdigstilt").asBoolean(false)
+
+            if (!ferdigstilt){
+                log.warn("Dokument lagret, men er ikke ferdigstilt!. Kontroller journalpost $journalpostId")
+            }
+            return response
+        }
+        catch (cause: ResponseException){
+            if (cause.response.status.value == 409) {
+                log.warn("Duplikat journalpost. Dropper melding med navCallID $callId", cause)
+            }
+            //TODO: Hva gjør vi med alle andre feil (400 bad request etc)
+            return null
+        }
+        catch (cause: Throwable) {
+            log.error("Feil i kall mot Dokarkiv: ", cause)
+            throw cause
+        }
+    }
+    suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?{
+        val request = mapRecordToRequestObject(record,pdf)
+        return lagrePdfTilJoark(record.key,request)
+
+    }
+    fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
+        val request = JournalpostRequest(
+            dokumentnavnJA,
+            JournalPostType.NOTAT,
+            tema,
+            kanal,
+            behandlingstema,
+            journalfoerendeEnhet="9999",
+            null,
+            Bruker(id="12345678912",idType="FNR"),
+            eksternReferanseId=record.key,
+            Fagsak(),
+            listOf(
+                JournalpostDokument(
+                    tittel = dokumentnavnJA,
+                    dokumentKategori = null,
+                    dokumentvarianter = listOf(
+                        DokumentVariant.ArkivPDF(fysiskDokument = Base64.getEncoder().encodeToString(pdf))
+
+           ))))
+
+       return request
+    }
+}
