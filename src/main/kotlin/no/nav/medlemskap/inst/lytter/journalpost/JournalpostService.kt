@@ -50,7 +50,7 @@ class JournalpostService() {
         }
         catch (cause: Throwable) {
             log.error("Feil i kall mot Dokarkiv: ", cause)
-            throw cause
+            return null
         }
     }
     suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?{

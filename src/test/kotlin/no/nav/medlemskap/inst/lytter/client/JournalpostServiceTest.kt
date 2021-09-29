@@ -44,8 +44,8 @@ class JournalpostServiceTest {
            val response =  service.lagrePdfTilJoark(uuid,request)
             println(JaksonParser().ToJson(request))
             println(response)
-            //val response2 =  service.lagrePdfTilJoark(uuid,request)
-            //println(response2)
+            val response2 =  service.lagrePdfTilJoark(uuid,request)
+            println(response2)
 
         }
 
