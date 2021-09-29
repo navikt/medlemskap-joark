@@ -6,19 +6,24 @@ import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 class JournalpostService() {
     val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr "
     val dokumentnavnNEI = "Automatisk vurdering: Er unntatt fra medlemskap i folketrygden pr  "
     val dokumentnavnUAVKLART = "Automatisk vurdert til «Uavklart»: Medlemskapet i folketrygden pr %dato kan ikke vurderes automatisk"
-    val tema = "Medlemskap"
-    val behandlingstema = ""
-    val kanal = ""
+    val tema = "MED"
+    val behandlingstema = null
+    val kanal = null
     val configuration = Configuration()
     val restClients = RestClientsImpl(
         configuration = configuration
     )
+    val journalfoerendeEnhet="9999"
+    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     companion object {
         private val log = KotlinLogging.logger { }
 
@@ -27,7 +32,6 @@ class JournalpostService() {
 
     suspend fun lagrePdfTilJoark(callId:String,journalpostRequest: JournalpostRequest):JsonNode?{
         try{
-            println("callID: $callId")
             val response = joarkClient.journalfoerDok(callId,journalpostRequest)
             val journalpostId = response.get("journalpostId").asText()
             val ferdigstilt = response.get("journalpostferdigstilt").asBoolean(false)
@@ -56,14 +60,14 @@ class JournalpostService() {
     }
     fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
         val request = JournalpostRequest(
-            dokumentnavnJA,
+            dokumentnavnJA+LocalDate.now().format(dateFormat),
             JournalPostType.NOTAT,
             tema,
             kanal,
             behandlingstema,
-            journalfoerendeEnhet="9999",
+            journalfoerendeEnhet,
             null,
-            Bruker(id="12345678912",idType="FNR"),
+            Bruker(id="02066407392",idType="FNR"),
             eksternReferanseId=record.key,
             Fagsak(),
             listOf(

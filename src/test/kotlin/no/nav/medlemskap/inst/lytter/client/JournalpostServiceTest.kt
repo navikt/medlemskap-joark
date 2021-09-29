@@ -1,14 +1,18 @@
 package no.nav.medlemskap.inst.lytter.client
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import no.nav.medlemskap.inst.lytter.journalpost.*
+import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
-suspend fun main() {
-    val runner = JournalpostServiceTest()
-    runner.run()
+ fun main() {
+    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+     println(LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.YYYY")))
+     println(LocalDate.now().format(dateFormat))
+    //val runner = JournalpostServiceTest()
+    //runner.run()
 }
 class JournalpostServiceTest {
 
@@ -16,15 +20,15 @@ class JournalpostServiceTest {
         val uuid = UUID.randomUUID().toString()
         val pdf = "dett er et journaldokument".toByteArray()
         val request = JournalpostRequest(
-            "Automatisk vurdering: Er medlem i folketrygden pr "+LocalDate.now(),
+            "Automatisk vurdering: Er medlem i folketrygden pr "+LocalDate.now().format(DateTimeFormatter.ofPattern("")),
             JournalPostType.NOTAT,
             tema = "MED",
             kanal=null,
             behandlingstema = null,
             journalfoerendeEnhet="9999",
             avsenderMottaker = null,
-            Bruker(id="03067492438"),
-            eksternReferanseId=uuid,
+            Bruker(id="02066407392"),
+            eksternReferanseId=uuid, //lik sykepengesøknadID (eller tilsvarden)
             sak=Fagsak(),
             listOf(
                 JournalpostDokument(
@@ -38,9 +42,10 @@ class JournalpostServiceTest {
 
         GlobalScope.run {
            val response =  service.lagrePdfTilJoark(uuid,request)
+            println(JaksonParser().ToJson(request))
             println(response)
-            val response2 =  service.lagrePdfTilJoark(uuid,request)
-            println(response2)
+            //val response2 =  service.lagrePdfTilJoark(uuid,request)
+            //println(response2)
 
         }
 

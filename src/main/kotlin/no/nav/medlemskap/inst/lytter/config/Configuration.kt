@@ -17,7 +17,7 @@ private val defaultProperties = ConfigurationMap(
         "AZURE_AUTHORITY_ENDPOINT" to "",
         "SERVICE_USER_USERNAME" to "test",
         "PDF_GEN_BASE_URL" to "https://medlemskap-oppslag-pdfgen.dev.intern.nav.no",
-        "JOARK_BASE_URL" to "https://dokarkiv-q1.dev.intern.nav.no",
+        "JOARK_BASE_URL" to "https://dokarkiv-q2.dev.intern.nav.no",
         "JOARK_CLIENT_ID" to "972814f3-8bdf-44f8-a191-c2ed00020b54",
         "AZURE_APP_CLIENT_SECRET" to "EP1ta~LYQ1jn~zv7C7IO.I~bQ3.IfLvoPk",
         "SECURITY_TOKEN_SERVICE_URL" to "",

@@ -29,6 +29,7 @@ class JoarkClient(
                  header(HttpHeaders.ContentType, ContentType.Application.Json)
                  header(HttpHeaders.Authorization, "Bearer ${token.token}")
                  header("Nav-Call-Id", callId)
+                 header("Nav-User-Id","LovMeSrvUser")
                  header("X-Correlation-Id", callId)
                  body = JaksonParser().ToJson(journalpostRequest)
              }
