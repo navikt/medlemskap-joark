@@ -68,7 +68,7 @@ class JournalpostService() {
             behandlingstema,
             journalfoerendeEnhet,
             null,
-            Bruker(id="02066407392",idType="FNR"),
+            Bruker(id="10108000398",idType="FNR"),
             eksternReferanseId=record.key,
             Fagsak(),
             listOf(
