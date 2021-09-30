@@ -5,7 +5,9 @@ import io.ktor.client.features.*
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -60,8 +62,10 @@ class JournalpostService() {
 
     }
     fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
+        val medlemskapVurdert = JaksonParser().parseToObject(record.json)
+        val tittel = dokumentnavnJA+medlemskapVurdert.datagrunnlag.periode.fom.format(dateFormat)
         val request = JournalpostRequest(
-            dokumentnavnJA+LocalDate.now().format(dateFormat),
+            tittel,
             JournalPostType.NOTAT,
             tema,
             kanal,
@@ -73,7 +77,7 @@ class JournalpostService() {
             Fagsak(),
             listOf(
                 JournalpostDokument(
-                    tittel = dokumentnavnJA,
+                    tittel = tittel,
                     dokumentKategori = null,
                     dokumentvarianter = listOf(
                         DokumentVariant.ArkivPDF(fysiskDokument = Base64.getEncoder().encodeToString(pdf))
@@ -81,5 +85,8 @@ class JournalpostService() {
            ))))
 
        return request
+    }
+    fun getStringAsDate(string:String):LocalDate{
+        return LocalDate.parse(string)
     }
 }

@@ -6,7 +6,6 @@ import java.time.LocalDate
 
 data class MedlemskapVurdert(
     val tidspunkt:String,
-    //val førsteDagForYtelse:String,
     val resultat: Resultat,
     val datagrunnlag: Datagrunnlag,
     val erNorskStatsborger: Boolean = resultat.finnRegelResultat(resultat,"REGEL_11")?.svar=="JA",
