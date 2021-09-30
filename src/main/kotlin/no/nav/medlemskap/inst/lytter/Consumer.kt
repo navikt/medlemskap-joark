@@ -30,7 +30,8 @@ class Consumer(
     fun pollMessages(): List<MedlemskapVurdertRecord> = //listOf("Message A","Message B","Message C")
 
         consumer.poll(Duration.ofSeconds(4))
-            .map { MedlemskapVurdertRecord(it.partition(),
+            .map { MedlemskapVurdertRecord(
+                it.partition(),
                 it.offset(),
                 it.value(),
                 it.key(),

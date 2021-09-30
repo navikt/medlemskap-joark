@@ -18,7 +18,8 @@ class JournalpostServiceValueChainTest {
 
      suspend fun run(){
          val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
-        val record= MedlemskapVurdertRecord(1,1,fileContent,"test","",fileContent)
+
+         val record= MedlemskapVurdertRecord(1,1,fileContent,"test","",fileContent)
         val service = JoarkService(Configuration())
          service.handle(record)
 

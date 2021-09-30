@@ -49,6 +49,7 @@ class JournalpostService() {
             return null
         }
         catch (cause: Throwable) {
+            cause.printStackTrace()
             log.error("Feil i kall mot Dokarkiv: ", cause)
             return null
         }

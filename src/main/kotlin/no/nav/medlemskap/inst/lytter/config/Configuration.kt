@@ -19,7 +19,7 @@ private val defaultProperties = ConfigurationMap(
         "PDF_GEN_BASE_URL" to "https://medlemskap-oppslag-pdfgen.dev.intern.nav.no",
         "JOARK_BASE_URL" to "https://dokarkiv-q2.dev.intern.nav.no",
         "JOARK_CLIENT_ID" to "972814f3-8bdf-44f8-a191-c2ed00020b54",
-        "AZURE_APP_CLIENT_SECRET" to "EP1ta~LYQ1jn~zv7C7IO.I~bQ3.IfLvoPk",
+        "AZURE_APP_CLIENT_SECRET" to "Wfh7Q~AA4DCzU3Vwhd2wu4BjpcTsiC-GTFc-5",
         "SECURITY_TOKEN_SERVICE_URL" to "",
         "SECURITY_TOKEN_SERVICE_REST_URL" to "",
         "SECURITY_TOKEN_SERVICE_API_KEY" to "",
