@@ -55,7 +55,6 @@ class Consumer(
                 delay(Duration.ofSeconds(5))
             }
         }.onEach {
-            println("received: " + it.size)
             it.forEach { record ->
                 joarkService.handle(record)
             }

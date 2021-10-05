@@ -2,7 +2,7 @@ package no.nav.medlemskap.inst.lytter.service
 
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
-
+import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
@@ -51,22 +51,22 @@ class JoarkService(
     private fun MedlemskapVurdertRecord.logIkkeOpprettetPdf() =
         JoarkService.log.warn(
             "Pdf ikke  opprettet grunnet validering ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
-            //kv("callId", key),
+            kv("callId", key),
         )
 
     private fun MedlemskapVurdertRecord.logOpprettetPdf() =
         JoarkService.log.info(
             "PDF opprettet - sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
-            //kv("callId", sykepengeSoknad.sykmeldingId),
+            kv("callId", key),
         )
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
         JoarkService.log.info(
             "Dokument opprettet i Joark- sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
-            //kv("callId", sykepengeSoknad.sykmeldingId),
+            kv("callId", key),
         )
     private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =
         JoarkService.log.warn(
             "Dokument Ikke opprettet i Joark- sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
-            //kv("callId", sykepengeSoknad.sykmeldingId),
+            kv("callId", key),
         )
 }

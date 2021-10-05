@@ -3,6 +3,7 @@ val konfigVersion = "1.6.10.0"
 val jacksonVersion = "2.10.5"
 val kotlinLoggerVersion = "1.8.3"
 val resilience4jVersion = "1.5.0"
+val logstashVersion = "6.4"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
@@ -27,6 +28,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("io.ktor:ktor-client-apache:$ktorVersion")
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("io.github.resilience4j:resilience4j-retry:$resilience4jVersion")
     implementation("io.github.resilience4j:resilience4j-kotlin:$resilience4jVersion")
