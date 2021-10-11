@@ -12,6 +12,7 @@ class JoarkServiceTest {
         val jaRequest = pdfService.mapRecordToRequestObject(fileContent)
         Assertions.assertTrue(jaRequest is PdfService.JaResponse)
         if (jaRequest is PdfService.JaResponse){
+            Assertions.assertTrue(jaRequest.fnr==("19026500128"))
             Assertions.assertTrue(jaRequest.erTredjelandsborger)
             Assertions.assertFalse(jaRequest.erNorskStatsborger)
             Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)

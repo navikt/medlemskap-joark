@@ -19,6 +19,7 @@ data class MedlemskapVurdert(
     }
 }
 data class Datagrunnlag(
+    val fnr:String,
     val ytelse:String,
     val førsteDagForYtelse:String?,
     val startDatoForYtelse:String?,

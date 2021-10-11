@@ -26,7 +26,7 @@ class PdfService()
         if (medlemskapVurdering.resultat.svar=="JA"){
             return JaResponse(
                 medlemskapVurdering.tidspunkt,
-                "12345678901", //TODO: få in fnr i grunnlag
+                medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
                 "Kari Nordlending", //TODO: få in navn i grunnlag

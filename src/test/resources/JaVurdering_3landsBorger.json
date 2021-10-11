@@ -3,6 +3,7 @@
   "versjonTjeneste" : "2d6afba",
   "versjonRegler" : "v1",
   "datagrunnlag" : {
+    "fnr": "19026500128",
     "periode" : {
       "fom" : "2021-08-21",
       "tom" : "2021-08-25"
