@@ -40,12 +40,12 @@ class JoarkService(
     }
     private fun validateRecord(record: MedlemskapVurdertRecord) :Boolean{
         try{
-            val node = JaksonParser().parse(record.json)
+            val medlemskapVurdering = JaksonParser().parseToObject(record.json)
+            return medlemskapVurdering.resultat.svar=="JA"
         }
         catch (e: Exception){
             return false
         }
-        return true
     }
 
     private fun MedlemskapVurdertRecord.logIkkeOpprettetPdf() =
