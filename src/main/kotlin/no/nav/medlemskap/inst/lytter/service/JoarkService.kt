@@ -28,6 +28,7 @@ class JoarkService(
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response!=null){
                 record.logDokumentLagretIJoark()
+                //publiser til topic ZZZ
             }
             else{
                 record.logDokumentIkkeLagretIJoark()
@@ -35,7 +36,7 @@ class JoarkService(
 
         }
         else{
-            record.logIkkeOpprettetPdf()
+            record.logFiltrert()
         }
     }
     private fun validateRecord(record: MedlemskapVurdertRecord) :Boolean{
@@ -48,9 +49,9 @@ class JoarkService(
         }
     }
 
-    private fun MedlemskapVurdertRecord.logIkkeOpprettetPdf() =
+    private fun MedlemskapVurdertRecord.logFiltrert() =
         JoarkService.log.warn(
-            "Pdf ikke  opprettet grunnet validering ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
+            "Melding filtrert pga validering. Kun JA svar prosesseres videre ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
 
