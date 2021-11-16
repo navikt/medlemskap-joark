@@ -1,17 +1,61 @@
-app-name: "medlemskap-joark-lytter"
-ingresses:
-  - ""
-srvuserpath: "serviceuser/data/dev/srvmedlemskapjoarklytter"
-env:
-  - name: "KAFKA_BOOTSTRAP_SERVERS"
-    value: ""
-  - name: "SCHEMA_REGISTRY_URL"
-    value: ""
-  - name: "SECURITY_TOKEN_SERVICE"
-    value: ""
-  - name: "INST_TOPIC"
-    value: ""
-  - name: "INST_GROUP"
-    value: ""
-  - name: "JOARK-URL"
-    value: ""
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: medlemskap-joark-listener
+  namespace: medlemskap
+  labels:
+    team: medlemskap
+spec:
+  azure:
+    application:
+      enabled: true
+  image: {{image}}
+  liveness:
+    path: "/isAlive"
+    port: 8080
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: "/isReady"
+    port: 8080
+    initialDelay: 20
+    timeout: 60
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 50
+  prometheus:
+    enabled: true
+    path: "/metrics"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  secureLogs:
+    enabled: true
+  kafka:
+    pool: nav-prod
+  accessPolicy:
+    outbound:
+      external:
+        - host: api-gw.oera.no
+        - host: saf.prod-fss-pub.nais.io
+        - host: login.microsoftonline.com
+        - host: dokarkiv.prod-fss-pub.nais.io
+  env:
+    - name: PDF_GEN_BASE_URL
+      value: https://medlemskap-oppslag-pdfgen.intern.nav.no
+    - name: AZURE_TENANT
+      value: 966ac572-f5b7-4bbe-aa88-c76419c0f851
+    - name: AZURE_AUTHORITY_ENDPOINT
+      value: https://login.microsoftonline.com
+    - name: SECURITY_TOKEN_SERVICE_URL
+      value: https://api-gw.oera.no/sts/SecurityTokenServiceProvider/
+    - name: SECURITY_TOKEN_SERVICE_REST_URL
+      value: https://api-gw.oera.no/security-token-service
+    - name : JOARK_CLIENT_ID
+      value: 162b3255-2f72-4399-8f7a-244add9ffaac
+    - name: JOARK_BASE_URL
+      value: https://dokarkiv.fss-pub.nais.io

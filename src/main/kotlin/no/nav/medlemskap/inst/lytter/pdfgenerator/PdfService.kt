@@ -1,5 +1,6 @@
 package no.nav.medlemskap.inst.lytter.pdfgenerator
 
+import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
@@ -12,10 +13,14 @@ class PdfService()
     val restClients = RestClientsImpl(
         configuration = configuration
     )
+    companion object {
+        private val secureLogger = KotlinLogging.logger("tjenestekall")
+    }
     private val pdfClient = restClients.pdfGen(configuration.register.pdfGenBaseUrl)
 
     suspend fun opprettPfd(record: MedlemskapVurdertRecord):ByteArray{
         val pdfRequest = mapRecordToRequestObject(record.json)
+        secureLogger.info { "kaller PdfGenerator med følgende parameter : "+pdfRequest.toJsonPrettyString() }
         val response = pdfClient.kallPDFGenerator(record.key,pdfRequest.getstatus(),pdfRequest.toJsonPrettyString())
         return response
     }
