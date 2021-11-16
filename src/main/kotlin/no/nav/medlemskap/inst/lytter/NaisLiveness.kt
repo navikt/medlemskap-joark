@@ -29,8 +29,6 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
 
         routing {
             get("/isAlive") {
-
-
                 val pdfHealth = callPdfGen()
                 val consumejobHealth = getConsuejobHealth(consumeJob)
                 val health = Health(listOf(pdfHealth,consumejobHealth))
@@ -72,12 +70,12 @@ suspend fun callPdfGen(): Componenthealth {
             "22.08.2021",
             "Kari Nordlending",
             true,
-            true,
+            false,
             MedlemskapVurdering.JA
         )
     )
     return try{
-        val response = pdfClient.kallPDFGenerator("",MedlemskapVurdering.JA,json.toPrettyString())
+        val response = pdfClient.kallPDFGenerator("1234",MedlemskapVurdering.JA,json.toPrettyString())
         return Componenthealth(Status.UP,"PDF-GEN",Configuration().register.pdfGenBaseUrl,"")
     }
     catch (exception:Exception){
