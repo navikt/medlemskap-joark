@@ -48,6 +48,7 @@ class JournalpostService() {
                 log.warn("Duplikat journalpost. Dropper melding med navCallID $callId", cause)
             }
             //TODO: Hva gjør vi med alle andre feil (400 bad request etc)
+            log.error("HTTP error i kall mot Dokarkiv: ${cause.response.status.value} ", cause)
             return null
         }
         catch (cause: Throwable) {
