@@ -21,7 +21,7 @@ class PdfService()
     suspend fun opprettPfd(record: MedlemskapVurdertRecord):ByteArray{
         val pdfRequest = mapRecordToRequestObject(record.json)
         secureLogger.info { "kaller PdfGenerator med følgende parameter : "+pdfRequest.toJsonPrettyString() }
-        val response = pdfClient.kallPDFGenerator(record.key,pdfRequest.getstatus(),pdfRequest.toJsonPrettyString())
+        val response = pdfClient.kallPDFGenerator(record.key,pdfRequest.getstatus(),pdfRequest)
         return response
     }
 

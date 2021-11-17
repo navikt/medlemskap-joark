@@ -38,6 +38,24 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                     call.respondText(JaksonParser().ToJson(health).toPrettyString(), ContentType.Text.Plain, HttpStatusCode.InternalServerError)
                 }
             }
+            get("/samplePdf") {
+                val pdfClient = RestClientsImpl(Configuration()).pdfGen(Configuration().register.pdfGenBaseUrl)
+                val request:PdfService.Response =
+                    PdfService.JaResponse(
+                        "13:23:07 30.08.2021",
+                        "12345678901",
+                        "01.08.2021",
+                        "22.08.2021",
+                        null,
+                        true,
+                        false,
+                        MedlemskapVurdering.JA
+                    )
+
+                    val response = pdfClient.kallPDFGenerator("1234",MedlemskapVurdering.JA,request)
+                    call.respondBytes { response }
+                }
+
             get("/isReady") {
                 call.respondText("Ready!", ContentType.Text.Plain, HttpStatusCode.OK)
             }
@@ -62,7 +80,7 @@ fun getConsuejobHealth(consumeJob: Job): Componenthealth {
 
 suspend fun callPdfGen(): Componenthealth {
     val pdfClient = RestClientsImpl(Configuration()).pdfGen(Configuration().register.pdfGenBaseUrl)
-    val json = JaksonParser().ToJson(
+    val pdfRequest =
         PdfService.JaResponse(
             "13:23:07 30.08.2021",
             "12345678901",
@@ -73,9 +91,8 @@ suspend fun callPdfGen(): Componenthealth {
             false,
             MedlemskapVurdering.JA
         )
-    )
     return try{
-        val response = pdfClient.kallPDFGenerator("1234",MedlemskapVurdering.JA,json.toPrettyString())
+        val response = pdfClient.kallPDFGenerator("1234",MedlemskapVurdering.JA,pdfRequest)
         return Componenthealth(Status.UP,"PDF-GEN",Configuration().register.pdfGenBaseUrl,"")
     }
     catch (exception:Exception){

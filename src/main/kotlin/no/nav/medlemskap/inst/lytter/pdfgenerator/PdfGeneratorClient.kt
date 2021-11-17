@@ -12,14 +12,14 @@ class PdfGeneratorClient(
     private val retry: Retry? = null
 ) {
 
-    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: MedlemskapVurdering, json: String): ByteArray {
+    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: MedlemskapVurdering, pdfRequest: PdfService.Response): ByteArray {
         return runWithRetryAndMetrics("MEDL-OPPSLAG-PDFGEN", "vurdermedlemskap", retry) {
             httpClient.post {
                 url("${baseUrl}${medlemskapVurdering.url}")
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 header("Nav-Call-Id", callId)
                 header("X-Correlation-Id", callId)
-                body = json.trimIndent()
+                body = pdfRequest
             }
         }
     }
