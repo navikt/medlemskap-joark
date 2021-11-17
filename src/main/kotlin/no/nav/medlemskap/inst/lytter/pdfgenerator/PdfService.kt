@@ -34,7 +34,7 @@ class PdfService()
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                "Kari Nordlending", //TODO: få in navn i grunnlag
+                null,
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -57,7 +57,7 @@ class PdfService()
                           val fnr:String,
                           val fom:String,
                           val tom:String,
-                          val navn:String,
+                          val navn:String?,
                           val erNorskStatsborger:Boolean,
                           val erTredjelandsborger:Boolean,
                           val medlemskapVurdering:MedlemskapVurdering
