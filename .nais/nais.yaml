@@ -20,6 +20,8 @@ spec:
     port: 8080
     initialDelay: 20
     timeout: 60
+  ingresses:
+    - https://medlemskap-joark-listener.dev.intern.nav.no
   replicas:
     min: 2
     max: 2
