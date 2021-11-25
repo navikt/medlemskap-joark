@@ -14,4 +14,17 @@ samt at en test også leser forventet respons fra medlemslap-oppslag tester (kon
 # kjøring lokalt
 komponenten kan startes lokalt så fremst man har de korrekte key store og trust store satt opp lokalt.
 
-Merk at det ikke er lagt opp til støtte for å lese fra lokal kafka pr i dag
+Merk at det ikke er lagt opp til støtte fo
+
+# Avhengigheter
+* Kafka
+* Medlemskap-pdfGen
+
+#UseCase diagram
+
+![usecase](./plantUml/usecase.png)
+
+
+#Value Chain diagram
+
+![valuechain](./plantUml/valueChain.png)
