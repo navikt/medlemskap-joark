@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+!include <logos/kafka>
+cloud {
+queue "<$kafka>" as kafka
+component medlemskap_joark_lytter
+component medlemskap_oppslag
+component medlemskap_pdf_gen
+}
+component doc_arkiv
+interface  https as rest
+
+rest--doc_arkiv
+medlemskap_joark_lytter-right-medlemskap_pdf_gen :https
+
+medlemskap_oppslag -> kafka : medlemskapvurdert
+kafka --> medlemskap_joark_lytter : medlemskapvurdert
+medlemskap_joark_lytter -->rest :Bearer token
+
+@enduml
