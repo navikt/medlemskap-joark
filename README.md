@@ -20,11 +20,11 @@ Merk at det ikke er lagt opp til støtte fo
 * Kafka
 * Medlemskap-pdfGen
 
-#UseCase diagram
+# UseCase diagram
 
 ![usecase](./plantUml/usecase.png)
 
 
-#Value Chain diagram
+# Value Chain diagram
 
 ![valuechain](./plantUml/valueChain.png)
