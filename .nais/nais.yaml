@@ -62,3 +62,5 @@ spec:
       value: 972814f3-8bdf-44f8-a191-c2ed00020b54
     - name: JOARK_BASE_URL
       value: https://dokarkiv.dev-fss-pub.nais.io
+    - name: PERSISTENCE_ENABLED
+      value: Ja

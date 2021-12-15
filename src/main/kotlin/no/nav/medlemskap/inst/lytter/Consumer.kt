@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.time.delay
 import mu.KotlinLogging
+import net.logstash.logback.argument.StructuredArguments
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.config.KafkaConfig
 import no.nav.medlemskap.inst.lytter.config.Environment
@@ -56,7 +57,17 @@ class Consumer(
             }
         }.onEach {
             it.forEach { record ->
-                joarkService.handle(record)
+                if (Configuration().register.persistence_enabled=="Ja"){
+                    joarkService.handle(record)
+                }
+                else{
+                    log.warn(
+                        "Melding filtrert ut. Første måned skal ingen dokumenter lagres ${record.key}, offsett: ${record.offset}, partiotion: ${record.partition}, topic: ${record.topic}",
+                        StructuredArguments.kv("callId", record.key),
+                    )
+                }
+
+
             }
         }.onEach {
             consumer.commitAsync()

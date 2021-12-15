@@ -32,7 +32,8 @@ private val defaultProperties = ConfigurationMap(
         "KAFKA_TRUSTSTORE_PATH" to "c:\\dev\\secrets\\client.truststore.jks",
         "KAFKA_CREDSTORE_PASSWORD" to "changeme",
         "KAFKA_KEYSTORE_PATH" to "c:\\dev\\secrets\\client.keystore.p12",
-        "KAFKA_CREDSTORE_PASSWORD" to "changeme"
+        "KAFKA_CREDSTORE_PASSWORD" to "changeme",
+        "PERSISTENCE_ENABLED" to "Ja"
     )
 )
 
@@ -68,6 +69,7 @@ data class Configuration(
         val pdfGenBaseUrl: String = "PDF_GEN_BASE_URL".configProperty(),
         val joarkBaseUrl: String = "JOARK_BASE_URL".configProperty(),
         val joarkClientId: String = "JOARK_CLIENT_ID".configProperty(),
+        val persistence_enabled:String  = "PERSISTENCE_ENABLED".configProperty(),
     )
     data class AzureAd(
         val clientId: String = "AZURE_APP_CLIENT_ID".configProperty(),
