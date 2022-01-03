@@ -53,7 +53,7 @@ class Consumer(
         flow {
             while (true) {
                 emit(pollMessages())
-                delay(Duration.ofSeconds(5))
+                delay(Duration.ofSeconds(1))
             }
         }.onEach {
             it.forEach { record ->

@@ -24,7 +24,7 @@ open class KafkaConfig(
         //KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG to schemaRegistry,
         ConsumerConfig.GROUP_ID_CONFIG to Configuration.KafkaConfig().groupID,
         ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
-        ConsumerConfig.MAX_POLL_RECORDS_CONFIG to 1
+        ConsumerConfig.MAX_POLL_RECORDS_CONFIG to 30
     ) + securityStrategy.securityConfig()
 
     fun createConsumer() = KafkaConsumer<String, String>(inst2Config())
