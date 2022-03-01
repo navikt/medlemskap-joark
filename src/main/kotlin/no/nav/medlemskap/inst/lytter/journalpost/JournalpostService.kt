@@ -74,7 +74,7 @@ class JournalpostService() {
             journalfoerendeEnhet,
             null,
             Bruker(id=medlemskapVurdert.datagrunnlag.fnr,idType="FNR"),
-            eksternReferanseId=record.key,
+            eksternReferanseId="${record.key}_${Configuration().kafkaConfig.groupID}",
             Fagsak(),
             listOf(
                 JournalpostDokument(
