@@ -3,32 +3,31 @@ package no.nav.medlemskap.inst.lytter.pdfgenerator
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
-import java.time.LocalDate
 
-class PdfService()
-{
+class PdfService() {
     val configuration = Configuration()
     val restClients = RestClientsImpl(
         configuration = configuration
     )
+
     companion object {
         private val secureLogger = KotlinLogging.logger("tjenestekall")
     }
+
     private val pdfClient = restClients.pdfGen(configuration.register.pdfGenBaseUrl)
 
-    suspend fun opprettPfd(record: MedlemskapVurdertRecord):ByteArray{
-        val pdfRequest = mapRecordToRequestObject(record.json)
-        secureLogger.info { "kaller PdfGenerator med følgende parameter : "+pdfRequest.toJsonPrettyString() }
-        val response = pdfClient.kallPDFGenerator(record.key,pdfRequest.getstatus(),pdfRequest)
+    suspend fun opprettPfd(record: MedlemskapVurdertRecord, medlemskapVurdering: MedlemskapVurdert): ByteArray {
+        val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
+        secureLogger.info { "kaller PdfGenerator med følgende parameter : " + pdfRequest.toJsonPrettyString() }
+        val response = pdfClient.kallPDFGenerator(record.key, pdfRequest.getstatus(), pdfRequest)
         return response
     }
 
-    fun mapRecordToRequestObject(json: String): Response {
-
-        val medlemskapVurdering = JaksonParser().parseToObject(json)
-        if (medlemskapVurdering.resultat.svar=="JA"){
+    fun mapRecordToRequestObject(medlemskapVurdering: MedlemskapVurdert): Response {
+        if (medlemskapVurdering.resultat.svar == "JA") {
             return JaResponse(
                 medlemskapVurdering.tidspunkt,
                 medlemskapVurdering.datagrunnlag.fnr,
@@ -40,29 +39,28 @@ class PdfService()
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
             )
 
-            }
-            else{
+        } else {
             return UavklartResponse()
         }
 
     }
 
-    interface Response{
-        fun getstatus():MedlemskapVurdering
-        fun toJsonPrettyString():String
+    interface Response {
+        fun getstatus(): MedlemskapVurdering
+        fun toJsonPrettyString(): String
 
     }
 
-    data class JaResponse(val tidspunkt:String,
-                          val fnr:String,
-                          val fom:String,
-                          val tom:String,
-                          val navn:String?,
-                          val erNorskStatsborger:Boolean,
-                          val erTredjelandsborger:Boolean,
-                          val medlemskapVurdering:MedlemskapVurdering
-    )
-        : Response {
+    data class JaResponse(
+        val tidspunkt: String,
+        val fnr: String,
+        val fom: String,
+        val tom: String,
+        val navn: String?,
+        val erNorskStatsborger: Boolean,
+        val erTredjelandsborger: Boolean,
+        val medlemskapVurdering: MedlemskapVurdering
+    ) : Response {
         override fun getstatus(): MedlemskapVurdering {
             return medlemskapVurdering
         }
@@ -72,7 +70,8 @@ class PdfService()
         }
 
     }
-    class UavklartResponse(): Response {
+
+    class UavklartResponse() : Response {
         override fun getstatus(): MedlemskapVurdering {
             return MedlemskapVurdering.UAVKLART
         }

@@ -1,6 +1,7 @@
 package no.nav.medlemskap.inst.lytter.service
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
+import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 class JoarkServiceTest {
@@ -9,7 +10,7 @@ class JoarkServiceTest {
     fun `mapping til JaResponse objekt for status Ja`(){
         val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
-        val jaRequest = pdfService.mapRecordToRequestObject(fileContent)
+        val jaRequest = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
         Assertions.assertTrue(jaRequest is PdfService.JaResponse)
         if (jaRequest is PdfService.JaResponse){
             Assertions.assertTrue(jaRequest.fnr==("19026500128"))

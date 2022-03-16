@@ -4,7 +4,9 @@ import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import no.nav.medlemskap.inst.lytter.domain.Ytelse
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.lang.Exception
@@ -21,9 +23,10 @@ class JoarkService(
     }
     suspend fun handle(record : MedlemskapVurdertRecord)
     {
-        if (validateRecord(record)){
+        val medlemskapVurdering = JaksonParser().parseToObject(record.json)
+        if (validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse == Ytelse.LOVME_GCP.name){
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
-            val pdf = PdfService().opprettPfd(record)
+            val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response!=null){
@@ -39,10 +42,9 @@ class JoarkService(
             record.logFiltrert()
         }
     }
-    private fun validateRecord(record: MedlemskapVurdertRecord) :Boolean{
+    private fun validateRecord(medlemskapVurdert: MedlemskapVurdert) :Boolean{
         try{
-            val medlemskapVurdering = JaksonParser().parseToObject(record.json)
-            return medlemskapVurdering.resultat.svar=="JA"
+            return medlemskapVurdert.resultat.svar=="JA"
         }
         catch (e: Exception){
             return false
