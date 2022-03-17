@@ -1,4 +1,6 @@
 package no.nav.medlemskap.inst.lytter.service
+import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
@@ -19,5 +21,13 @@ class JoarkServiceTest {
             Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
 
         }
+    }
+
+    @Test
+    fun `validering av record`() {
+        val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+
+        Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
 }

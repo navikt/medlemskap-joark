@@ -27,8 +27,8 @@ class PdfService() {
     }
 
     fun mapRecordToRequestObject(medlemskapVurdering: MedlemskapVurdert): Response {
-        if (medlemskapVurdering.resultat.svar == "JA") {
-            return JaResponse(
+        return if (medlemskapVurdering.resultat.svar == "JA") {
+            JaResponse(
                 medlemskapVurdering.tidspunkt,
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
@@ -40,7 +40,7 @@ class PdfService() {
             )
 
         } else {
-            return UavklartResponse()
+            UavklartResponse()
         }
 
     }

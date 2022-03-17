@@ -6,7 +6,7 @@ import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
-import no.nav.medlemskap.inst.lytter.domain.Ytelse
+import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.lang.Exception
@@ -14,40 +14,42 @@ import java.lang.Exception
 
 class JoarkService(
     private val configuration: Configuration,
-    )
-{
+) {
     val journalpostService = JournalpostService()
+
     companion object {
         private val log = KotlinLogging.logger { }
 
     }
-    suspend fun handle(record : MedlemskapVurdertRecord)
-    {
+
+    suspend fun handle(record: MedlemskapVurdertRecord) {
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
-        if (validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse == Ytelse.LOVME_GCP.name){
+        if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
-            if (response!=null){
+            if (response != null) {
                 record.logDokumentLagretIJoark()
                 //publiser til topic ZZZ
-            }
-            else{
+            } else {
                 record.logDokumentIkkeLagretIJoark()
             }
 
-        }
-        else{
+        } else {
             record.logFiltrert()
         }
     }
-    private fun validateRecord(medlemskapVurdert: MedlemskapVurdert) :Boolean{
-        try{
-            return medlemskapVurdert.resultat.svar=="JA"
-        }
-        catch (e: Exception){
-            return false
+
+    fun skalOpprettePDF(medlemskapVurdering: MedlemskapVurdert): Boolean {
+        return validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
+    }
+
+    private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
+        return try {
+            medlemskapVurdert.resultat.svar == "JA"
+        } catch (e: Exception) {
+            false
         }
     }
 
@@ -62,11 +64,13 @@ class JoarkService(
             "PDF opprettet - sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
+
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
         JoarkService.log.info(
             "Dokument opprettet i Joark- sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
+
     private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =
         JoarkService.log.warn(
             "Dokument Ikke opprettet i Joark- sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
