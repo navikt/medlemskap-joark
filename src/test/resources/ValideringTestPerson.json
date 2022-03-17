@@ -4,7 +4,7 @@
   "versjonRegler" : "v1",
   "kanal" : "/",
   "datagrunnlag" : {
-    "fnr" : "15076500565",
+    "fnr" : "12345678910",
     "periode" : {
       "fom" : "2019-01-01",
       "tom" : "2019-12-31"
