@@ -1,9 +1,11 @@
 package no.nav.medlemskap.inst.lytter.jakson
+
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
 import no.nav.medlemskap.inst.lytter.http.httpClient
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import org.junit.jupiter.api.Assertions

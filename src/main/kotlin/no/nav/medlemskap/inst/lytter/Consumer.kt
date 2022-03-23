@@ -23,7 +23,9 @@ class Consumer(
         private val log = KotlinLogging.logger { }
 
     }
+
     val joarkService = JoarkService(Configuration())
+
     init {
         consumer.subscribe(listOf(config.topic))
     }
@@ -31,13 +33,15 @@ class Consumer(
     fun pollMessages(): List<MedlemskapVurdertRecord> = //listOf("Message A","Message B","Message C")
 
         consumer.poll(Duration.ofSeconds(4))
-            .map { MedlemskapVurdertRecord(
-                it.partition(),
-                it.offset(),
-                it.value(),
-                it.key(),
-                it.topic(),
-                it.value())
+            .map {
+                MedlemskapVurdertRecord(
+                    it.partition(),
+                    it.offset(),
+                    it.value(),
+                    it.key(),
+                    it.topic(),
+                    it.value()
+                )
             }
             .also {
                 //Metrics.incReceivedTotal(it.count())
@@ -47,7 +51,7 @@ class Consumer(
             }
 
 
-            //.filter { it.kilde == Hendelse.Kilde.KDI }
+    //.filter { it.kilde == Hendelse.Kilde.KDI }
 
     fun flow(): Flow<List<MedlemskapVurdertRecord>> =
         flow {
@@ -57,10 +61,9 @@ class Consumer(
             }
         }.onEach {
             it.forEach { record ->
-                if (Configuration().register.persistence_enabled=="Ja"){
+                if (Configuration().register.persistence_enabled == "Ja") {
                     joarkService.handle(record)
-                }
-                else{
+                } else {
                     log.warn(
                         "Melding filtrert ut. Første måned skal ingen dokumenter lagres ${record.key}, offsett: ${record.offset}, partiotion: ${record.partition}, topic: ${record.topic}",
                         StructuredArguments.kv("callId", record.key),
