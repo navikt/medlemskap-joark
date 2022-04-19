@@ -24,14 +24,14 @@ class JoarkServiceTest {
     }
 
     @Test
-    fun `validering av record`() {
+    fun `endepuntk som ikke er kafka verdikjede skal ikke generere PDF dokumenter`() {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
 
         Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
     @Test
-    fun `validering av record med Kafka endepunkt`() {
+    fun `Kun kafka endepunkt skal generere PDF dokumenter`() {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson_kafka.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
 
