@@ -2,6 +2,7 @@
   "tidspunkt" : "2022-03-09T10:41:41.700482",
   "versjonTjeneste" : "",
   "versjonRegler" : "v1",
+  "kanal" : "kafka",
   "datagrunnlag" : {
     "fnr" : "12345678910",
     "periode" : {
