@@ -48,7 +48,7 @@ class JoarkService(
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
         return try {
             //vi skal kun opprette dokumenter for JA svar og for de som blir kalt via Kafa
-            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="Kafka"
+            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka"
         } catch (e: Exception) {
             false
         }
