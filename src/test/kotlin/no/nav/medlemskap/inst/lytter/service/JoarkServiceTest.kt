@@ -28,6 +28,13 @@ class JoarkServiceTest {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
 
-        Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+        Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
+    @Test
+    fun `validering av record med Kafka endepunkt`() {
+        val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+
+        Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
 }

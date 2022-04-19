@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 
 data class MedlemskapVurdert(
+    val kanal: String?,
     val tidspunkt: String,
     val resultat: Resultat,
     val datagrunnlag: Datagrunnlag,

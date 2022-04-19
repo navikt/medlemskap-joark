@@ -1,6 +1,7 @@
 {
   "tidspunkt" : "2021-08-30T11:57:06.69889",
   "versjonTjeneste" : "2d6afba",
+  "kanal" : "/",
   "versjonRegler" : "v1",
   "datagrunnlag" : {
     "fnr": "19026500128",
