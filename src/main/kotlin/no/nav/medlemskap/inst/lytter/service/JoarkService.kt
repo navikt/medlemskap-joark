@@ -19,6 +19,7 @@ class JoarkService(
 
     companion object {
         private val log = KotlinLogging.logger { }
+        private val secureLogger = KotlinLogging.logger("tjenestekall")
 
     }
 
@@ -28,6 +29,10 @@ class JoarkService(
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
+            secureLogger.info("PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
+                kv("callId", record.key),
+                kv("fnr",medlemskapVurdering.datagrunnlag.fnr)
+            )
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response != null) {
                 record.logDokumentLagretIJoark()
@@ -48,10 +53,13 @@ class JoarkService(
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
         return try {
             //vi skal kun opprette dokumenter for JA svar og for de som blir kalt via Kafa
-            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka"
+            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka" && filtrervekkProsent(99)
         } catch (e: Exception) {
             false
         }
+    }
+     fun filtrervekkProsent(percentage: Int): Boolean {
+        return (0..100).random()>percentage.toInt()
     }
 
     private fun MedlemskapVurdertRecord.logFiltrert() =
@@ -60,11 +68,12 @@ class JoarkService(
             kv("callId", key),
         )
 
-    private fun MedlemskapVurdertRecord.logOpprettetPdf() =
+    private fun MedlemskapVurdertRecord.logOpprettetPdf() {
         JoarkService.log.info(
             "PDF opprettet - sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
+    }
 
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
         JoarkService.log.info(

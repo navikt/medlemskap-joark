@@ -1,6 +1,5 @@
 package no.nav.medlemskap.inst.lytter.service
 import no.nav.medlemskap.inst.lytter.config.Configuration
-import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
@@ -36,5 +35,21 @@ class JoarkServiceTest {
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
 
         Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
+
+    @Test
+    fun `filtrervekkProsent skal filtrere vekk 99 % med en viss feil margin`(){
+        val joarkService:JoarkService = JoarkService(Configuration())
+        var count =0;
+        for (i in 1..1000000){
+            val filtered = joarkService.filtrervekkProsent(99)
+            if (filtered){
+                count++
+            }
+        }
+        Assertions.assertTrue(count>9800 && count <10300)
+
+
+
     }
 }
