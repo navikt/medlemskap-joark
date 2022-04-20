@@ -25,7 +25,7 @@ class JoarkService(
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
-        if (skalOpprettePDF(medlemskapVurdering)) {
+        if (skalOpprettePDF(medlemskapVurdering) && filtrervekkProsent(99)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
@@ -53,7 +53,7 @@ class JoarkService(
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
         return try {
             //vi skal kun opprette dokumenter for JA svar og for de som blir kalt via Kafa
-            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka" && filtrervekkProsent(99)
+            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka"
         } catch (e: Exception) {
             false
         }
