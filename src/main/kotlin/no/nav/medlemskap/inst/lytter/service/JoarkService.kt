@@ -68,12 +68,11 @@ class JoarkService(
             kv("callId", key),
         )
 
-    private fun MedlemskapVurdertRecord.logOpprettetPdf() {
+    private fun MedlemskapVurdertRecord.logOpprettetPdf() =
         JoarkService.log.info(
             "PDF opprettet - sykmeldingId: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
-    }
 
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
         JoarkService.log.info(
