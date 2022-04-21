@@ -64,7 +64,7 @@ class JoarkService(
 
     private fun MedlemskapVurdertRecord.logFiltrert() =
         JoarkService.log.warn(
-            "Melding filtrert pga validering. Kun JA svar prosesseres videre ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
+            "Melding filtrert pga validerings logikk ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
 
