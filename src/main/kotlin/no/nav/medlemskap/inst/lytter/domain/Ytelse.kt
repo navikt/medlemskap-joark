@@ -1,5 +1,6 @@
 package no.nav.medlemskap.inst.lytter.domain
 
 val ytelserSomKanGenererePDF = listOf(
-    "LOVME_GCP"
+    "LOVME_GCP",
+    "SYKEPENGER"
 )

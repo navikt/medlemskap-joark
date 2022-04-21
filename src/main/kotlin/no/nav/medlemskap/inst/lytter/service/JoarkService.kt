@@ -19,15 +19,20 @@ class JoarkService(
 
     companion object {
         private val log = KotlinLogging.logger { }
+        private val secureLogger = KotlinLogging.logger("tjenestekall")
 
     }
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
-        if (skalOpprettePDF(medlemskapVurdering)) {
+        if (skalOpprettePDF(medlemskapVurdering) && filtrervekkProsent(99)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
+            secureLogger.info("PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
+                kv("callId", record.key),
+                kv("fnr",medlemskapVurdering.datagrunnlag.fnr)
+            )
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response != null) {
                 record.logDokumentLagretIJoark()
@@ -52,6 +57,9 @@ class JoarkService(
         } catch (e: Exception) {
             false
         }
+    }
+     fun filtrervekkProsent(percentage: Int): Boolean {
+        return (0..100).random()>percentage.toInt()
     }
 
     private fun MedlemskapVurdertRecord.logFiltrert() =

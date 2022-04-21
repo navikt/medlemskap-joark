@@ -5,7 +5,6 @@ import io.ktor.client.features.*
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
-import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import java.time.LocalDate
