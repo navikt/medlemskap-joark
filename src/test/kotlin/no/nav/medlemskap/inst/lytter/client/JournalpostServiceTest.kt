@@ -20,7 +20,7 @@ class JournalpostServiceTest {
         val uuid = UUID.randomUUID().toString()
         val pdf = "dett er et journaldokument".toByteArray()
         val request = JournalpostRequest(
-            "Automatisk vurdering: Er medlem i folketrygden pr "+LocalDate.now().format(DateTimeFormatter.ofPattern("")),
+            "Automatisk vurdering: Er medlem i folketrygden pr. "+LocalDate.now().format(DateTimeFormatter.ofPattern("")),
             JournalPostType.NOTAT,
             tema = "MED",
             kanal=null,
@@ -32,7 +32,7 @@ class JournalpostServiceTest {
             sak=Fagsak(),
             listOf(
                 JournalpostDokument(
-                    tittel = "Automatisk vurdering: Er medlem i folketrygden pr "+LocalDate.now(),
+                    tittel = "Automatisk vurdering: Er medlem i folketrygden pr. "+LocalDate.now(),
                     DokumentKategori.IB,
                     dokumentvarianter = listOf(
                         DokumentVariant.ArkivPDF(fysiskDokument = Base64.getEncoder().encodeToString(pdf))

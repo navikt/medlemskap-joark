@@ -13,9 +13,9 @@ import java.time.format.FormatStyle
 import java.util.*
 
 class JournalpostService() {
-    val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr "
-    val dokumentnavnNEI = "Automatisk vurdering: Er unntatt fra medlemskap i folketrygden pr  "
-    val dokumentnavnUAVKLART = "Automatisk vurdert til «Uavklart»: Medlemskapet i folketrygden pr %dato kan ikke vurderes automatisk"
+    val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr. "
+    val dokumentnavnNEI = "Automatisk vurdering: Er unntatt fra medlemskap i folketrygden pr.  "
+    val dokumentnavnUAVKLART = "Automatisk vurdert til «Uavklart»: Medlemskapet i folketrygden pr. %dato kan ikke vurderes automatisk"
     val tema = "MED"
     val behandlingstema = null
     val kanal = null
