@@ -33,7 +33,9 @@ class PdfService() {
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                null,
+                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().fornavn,
+                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().mellomnavn ?: "",
+                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().etternavn,
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -56,7 +58,9 @@ class PdfService() {
         val fnr: String,
         val fom: String,
         val tom: String,
-        val navn: String?,
+        val fornavn: String,
+        val mellomnavn: String?,
+        val etternavn: String,
         val erNorskStatsborger: Boolean,
         val erTredjelandsborger: Boolean,
         val medlemskapVurdering: MedlemskapVurdering
