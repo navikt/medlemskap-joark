@@ -52,20 +52,4 @@ class JoarkServiceTest {
 
         Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
-
-    @Test
-    fun `filtrervekkProsent skal filtrere vekk 99 % med en viss feil margin`(){
-        val joarkService:JoarkService = JoarkService(Configuration())
-        var count =0;
-        for (i in 1..1000000){
-            val filtered = joarkService.filtrervekkProsent(99)
-            if (filtered){
-                count++
-            }
-        }
-        Assertions.assertTrue(count>9800 && count <10300)
-
-
-
-    }
 }

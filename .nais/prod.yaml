@@ -60,4 +60,4 @@ spec:
     - name: JOARK_BASE_URL
       value: https://dokarkiv.prod-fss-pub.nais.io
     - name: PERSISTENCE_ENABLED
-      value: Nei
+      value: Ja

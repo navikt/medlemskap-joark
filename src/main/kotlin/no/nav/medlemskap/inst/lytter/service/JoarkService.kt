@@ -25,7 +25,7 @@ class JoarkService(
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
-        if (skalOpprettePDF(medlemskapVurdering) && filtrervekkProsent(99)) {
+        if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()
