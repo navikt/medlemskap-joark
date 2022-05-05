@@ -29,6 +29,7 @@ class JoarkServiceTest {
 
         Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
+
     @Test
     fun `Kun kafka endepunkt skal generere PDF dokumenter`() {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson_kafka.json").readText(Charsets.UTF_8)

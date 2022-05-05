@@ -46,9 +46,7 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                         "12345678901",
                         "01.08.2021",
                         "22.08.2021",
-                        "Kari",
-                        null,
-                        "Nordlending",
+                        "Kari Nordlending",
                         true,
                         false,
                         MedlemskapVurdering.JA
@@ -88,9 +86,7 @@ suspend fun callPdfGen(): Componenthealth {
             "12345678901",
             "01.08.2021",
             "22.08.2021",
-            "Kari",
-            null,
-            "Nordlending",
+            "Kari Nordlending",
             true,
             false,
             MedlemskapVurdering.JA

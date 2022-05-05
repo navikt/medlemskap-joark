@@ -5,6 +5,7 @@ import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import no.nav.medlemskap.inst.lytter.domain.Navn
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 
 class PdfService() {
@@ -33,9 +34,7 @@ class PdfService() {
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().fornavn,
-                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().mellomnavn ?: "",
-                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().etternavn,
+                slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -46,6 +45,8 @@ class PdfService() {
         }
 
     }
+
+    private fun slåSammenNavn(pdlNavn: Navn): String = pdlNavn.fornavn + pdlNavn.mellomnavn + pdlNavn.etternavn
 
     interface Response {
         fun getstatus(): MedlemskapVurdering
@@ -58,9 +59,7 @@ class PdfService() {
         val fnr: String,
         val fom: String,
         val tom: String,
-        val fornavn: String,
-        val mellomnavn: String?,
-        val etternavn: String,
+        val navn: String,
         val erNorskStatsborger: Boolean,
         val erTredjelandsborger: Boolean,
         val medlemskapVurdering: MedlemskapVurdering
