@@ -23,10 +23,16 @@ data class Datagrunnlag(
     val ytelse: String,
     val førsteDagForYtelse: String?,
     val startDatoForYtelse: String?,
-    val periode: Periode
+    val periode: Periode,
+    val pdlpersonhistorikk: Personhistorikk,
 )
 
+data class Personhistorikk(val navn: List<Navn>)
+
+data class Navn(val fornavn: String, val mellomnavn: String?, val etternavn: String)
+
 data class Periode(val fom: LocalDate, val tom: LocalDate)
+
 data class Resultat(
     val svar: String,
     val dekning: String,

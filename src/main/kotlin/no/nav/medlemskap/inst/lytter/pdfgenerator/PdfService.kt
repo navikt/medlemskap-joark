@@ -5,6 +5,7 @@ import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
+import no.nav.medlemskap.inst.lytter.domain.Navn
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 
 class PdfService() {
@@ -33,7 +34,7 @@ class PdfService() {
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                null,
+                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().toString(),
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -56,7 +57,7 @@ class PdfService() {
         val fnr: String,
         val fom: String,
         val tom: String,
-        val navn: String?,
+        val navn: String,
         val erNorskStatsborger: Boolean,
         val erTredjelandsborger: Boolean,
         val medlemskapVurdering: MedlemskapVurdering

@@ -46,7 +46,7 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                         "12345678901",
                         "01.08.2021",
                         "22.08.2021",
-                        null,
+                        "Kari Nordlending",
                         true,
                         false,
                         MedlemskapVurdering.JA

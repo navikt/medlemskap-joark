@@ -23,9 +23,10 @@ class JaksonMapperTest {
         val parsed = JaksonParser().parseToObject(fileContent)
         Assertions.assertNotNull(parsed)
     }
+
     @Test
      fun `kontrakt testing medlemskap-oppslag`(){
-        val fileContent = URL("https://raw.githubusercontent.com/navikt/medlemskap-oppslag/kafka/src/test/resources/testpersoner/bakoverkompatibeltest/forventetRespons.json").readText(Charsets.UTF_8)
+        val fileContent = URL("https://raw.githubusercontent.com/navikt/medlemskap-oppslag/master/src/test/resources/testpersoner/bakoverkompatibeltest/forventetRespons.json").readText(Charsets.UTF_8)
         val parsed = JaksonParser().parseToObject(fileContent)
         Assertions.assertNotNull(parsed)
     }
