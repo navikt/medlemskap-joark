@@ -34,7 +34,7 @@ class PdfService() {
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().toString(),
+                slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -44,6 +44,13 @@ class PdfService() {
             UavklartResponse()
         }
 
+    }
+
+    fun slåSammenNavn(pdlNavn: Navn): String {
+        return when(pdlNavn.mellomnavn) {
+            null -> "${pdlNavn.fornavn} ${pdlNavn.etternavn}"
+            else -> "${pdlNavn.fornavn} ${pdlNavn.mellomnavn} ${pdlNavn.etternavn}"
+        }
     }
 
     interface Response {

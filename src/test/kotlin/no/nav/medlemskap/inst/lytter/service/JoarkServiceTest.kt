@@ -18,7 +18,22 @@ class JoarkServiceTest {
             Assertions.assertTrue(jaRequest.erTredjelandsborger)
             Assertions.assertFalse(jaRequest.erNorskStatsborger)
             Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
+            Assertions.assertEquals("Test Person", jaRequest.navn)
+        }
+    }
 
+    @Test
+    fun `mapping til JaResponse objekt med mellomnavn for status Ja`(){
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorgerMedMellomnavn.json").readText(Charsets.UTF_8)
+        val pdfService = PdfService()
+        val jaRequest = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
+        Assertions.assertTrue(jaRequest is PdfService.JaResponse)
+        if (jaRequest is PdfService.JaResponse){
+            Assertions.assertTrue(jaRequest.fnr==("19026500128"))
+            Assertions.assertTrue(jaRequest.erTredjelandsborger)
+            Assertions.assertFalse(jaRequest.erNorskStatsborger)
+            Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
+            Assertions.assertEquals("Test Test Person", jaRequest.navn)
         }
     }
 
