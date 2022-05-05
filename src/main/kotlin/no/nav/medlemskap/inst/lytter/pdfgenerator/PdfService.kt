@@ -34,7 +34,7 @@ class PdfService() {
                 medlemskapVurdering.datagrunnlag.fnr,
                 medlemskapVurdering.datagrunnlag.periode.fom.toString(),
                 medlemskapVurdering.datagrunnlag.periode.tom.toString(),
-                slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
+                medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first().toString(),
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
                 MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar)
@@ -45,8 +45,6 @@ class PdfService() {
         }
 
     }
-
-    private fun slåSammenNavn(pdlNavn: Navn): String = pdlNavn.fornavn + pdlNavn.mellomnavn + pdlNavn.etternavn
 
     interface Response {
         fun getstatus(): MedlemskapVurdering
