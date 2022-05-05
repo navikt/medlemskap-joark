@@ -45,7 +45,12 @@
         "relatertVedSivilstand" : "0101197512345"
       } ],
       "forelderBarnRelasjon" : [ ],
-      "doedsfall" : [ ]
+      "doedsfall" : [ ],
+      "navn" : [ {
+        "fornavn" : "Test",
+        "mellomnavn" : null,
+        "etternavn" : "Person"
+      } ]
     },
     "medlemskap" : [ {
       "dekning" : "dekning",

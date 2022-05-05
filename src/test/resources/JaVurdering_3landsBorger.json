@@ -72,7 +72,12 @@
         "relatertPersonsRolle" : "MOR",
         "minRolleForPerson" : "BARN"
       } ],
-      "doedsfall" : [ ]
+      "doedsfall" : [ ],
+      "navn" : [ {
+        "fornavn" : "Test",
+        "mellomnavn" : null,
+        "etternavn" : "Person"
+      } ]
     },
     "medlemskap" : [ ],
     "arbeidsforhold" : [ {
