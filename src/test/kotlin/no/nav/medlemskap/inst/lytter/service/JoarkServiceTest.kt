@@ -52,4 +52,11 @@ class JoarkServiceTest {
 
         Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
+    @Test
+    fun `arbeid utland skal ikke generere PDF dokumenter`() {
+        val fileContent = this::class.java.classLoader.getResource("ValideringTestPersonArbeidUtlandTrue.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+
+        Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
 }

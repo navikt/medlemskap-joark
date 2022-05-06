@@ -10,13 +10,17 @@ data class MedlemskapVurdert(
     val datagrunnlag: Datagrunnlag,
     val erNorskStatsborger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_11")?.svar == "JA",
     val erEOSBorger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_2")?.svar == "JA",
-    val erTredjelandsBorger: Boolean = !erEOSBorger
+    val erTredjelandsBorger: Boolean = !erEOSBorger,
 
 ) {
     fun finnRegelResultat(regel: String): Resultat? {
         return resultat.finnRegelResultat(resultat, regel)
     }
 }
+
+data class Brukerinput(
+    val arbeidUtenforNorge:Boolean
+)
 
 data class Datagrunnlag(
     val fnr: String,
@@ -25,6 +29,7 @@ data class Datagrunnlag(
     val startDatoForYtelse: String?,
     val periode: Periode,
     val pdlpersonhistorikk: Personhistorikk,
+    val brukerinput:Brukerinput
 )
 
 data class Personhistorikk(val navn: List<Navn>)
