@@ -5,6 +5,7 @@ import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+
 class JoarkServiceTest {
 
     @Test
