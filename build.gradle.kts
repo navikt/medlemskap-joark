@@ -9,7 +9,7 @@ val httpClientVersion = "4.5.13"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.7.10"
     application
     id("com.github.davidmc24.gradle.plugin.avro") version "1.2.0"
     id("com.github.johnrengelman.shadow") version "7.0.0"
