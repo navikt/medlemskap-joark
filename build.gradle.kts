@@ -11,7 +11,6 @@ val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 plugins {
     kotlin("jvm") version "1.7.10"
     application
-    id("com.github.davidmc24.gradle.plugin.avro") version "1.2.0"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -63,8 +62,6 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggerVersion")
     // 2.8.0 er tilgjengelig, burde kanskje oppdatere
     implementation("org.apache.kafka:kafka-clients:2.5.0")
-    implementation("org.apache.avro:avro:1.10.2")
-    implementation("io.confluent:kafka-avro-serializer:5.2.2")
     testImplementation(platform("org.junit:junit-bom:5.7.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("io.mockk:mockk:1.11.0")
