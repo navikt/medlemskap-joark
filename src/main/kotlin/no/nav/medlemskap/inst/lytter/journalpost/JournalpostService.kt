@@ -12,10 +12,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 
-class JournalpostService() {
+class JournalpostService() :IKanJournalforePDF {
     val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr. "
-    val dokumentnavnNEI = "Automatisk vurdering: Er unntatt fra medlemskap i folketrygden pr.  "
-    val dokumentnavnUAVKLART = "Automatisk vurdert til «Uavklart»: Medlemskapet i folketrygden pr. %dato kan ikke vurderes automatisk"
     val tema = "MED"
     val behandlingstema = null
     val kanal = null
@@ -56,7 +54,7 @@ class JournalpostService() {
             return null
         }
     }
-    suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?{
+    override suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord, pdf: ByteArray):JsonNode?{
         val request = mapRecordToRequestObject(record,pdf)
         return lagrePdfTilJoark(record.key,request)
 
@@ -89,4 +87,8 @@ class JournalpostService() {
     fun getStringAsDate(string:String):LocalDate{
         return LocalDate.parse(string)
     }
+}
+
+interface IKanJournalforePDF {
+    suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?
 }

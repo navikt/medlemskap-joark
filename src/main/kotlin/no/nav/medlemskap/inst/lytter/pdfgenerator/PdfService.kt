@@ -8,7 +8,7 @@ import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.domain.Navn
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 
-class PdfService() {
+class PdfService():IkanOpprettePdf {
     val configuration = Configuration()
     val restClients = RestClientsImpl(
         configuration = configuration
@@ -20,7 +20,7 @@ class PdfService() {
 
     private val pdfClient = restClients.pdfGen(configuration.register.pdfGenBaseUrl)
 
-    suspend fun opprettPfd(record: MedlemskapVurdertRecord, medlemskapVurdering: MedlemskapVurdert): ByteArray {
+    override suspend fun opprettPfd(record: MedlemskapVurdertRecord, medlemskapVurdering: MedlemskapVurdert): ByteArray {
         val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
         secureLogger.info { "kaller PdfGenerator med følgende parameter : " + pdfRequest.toJsonPrettyString() }
         val response = pdfClient.kallPDFGenerator(record.key, pdfRequest.getstatus(), pdfRequest)
@@ -41,7 +41,20 @@ class PdfService() {
             )
 
         } else {
-            UavklartResponse()
+            UavklartResponse(
+                tidspunkt = medlemskapVurdering.tidspunkt,
+                fnr = medlemskapVurdering.datagrunnlag.fnr,
+                fom = medlemskapVurdering.datagrunnlag.periode.fom.toString(),
+                tom = medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
+                erNorskStatsborger = medlemskapVurdering.erNorskStatsborger,
+                erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger,
+                medlemskapVurdering =  MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar),
+                ytelse = medlemskapVurdering.datagrunnlag.ytelse,
+                //medlemskapVurdering.resultat.
+                årsaker = emptyList<Regel>(),
+                statsborger = ""
+            )
         }
 
     }
@@ -79,7 +92,29 @@ class PdfService() {
 
     }
 
-    class UavklartResponse() : Response {
+    class Regel(
+        val regelId:String,
+        val avklaring:String,
+        val svar:String,
+        val begrunnelse:String,
+        val beskrivelse:String
+    ) {
+
+    }
+
+    class UavklartResponse(
+        val tidspunkt: String,
+        val fnr: String,
+        val fom: String,
+        val tom: String,
+        val navn: String,
+        val statsborger:String,
+        val ytelse:String,
+        val årsaker :List<Regel>,
+        val erNorskStatsborger: Boolean,
+        val erTredjelandsborger: Boolean,
+        val medlemskapVurdering: MedlemskapVurdering
+    ) : Response {
         override fun getstatus(): MedlemskapVurdering {
             return MedlemskapVurdering.UAVKLART
         }
@@ -91,4 +126,8 @@ class PdfService() {
     }
 
 }
+
+interface IkanOpprettePdf {
+    suspend fun opprettPfd(record: MedlemskapVurdertRecord, medlemskapVurdering: MedlemskapVurdert): ByteArray
+    }
 
