@@ -67,7 +67,8 @@ class JoarkService(
         medlemskapVurdering: MedlemskapVurdert,
         record: MedlemskapVurdertRecord
     ) {
-        if (skalOpprettePDF(medlemskapVurdering)) {
+        val handler = DagpengeHandler(pdfService,journalpostService)
+        if (handler.skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf =pdfService.opprettPfd(record, medlemskapVurdering)
             record.logOpprettetPdf()

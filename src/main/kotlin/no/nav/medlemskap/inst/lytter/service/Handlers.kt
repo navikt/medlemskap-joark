@@ -1,10 +1,12 @@
 package no.nav.medlemskap.inst.lytter.service
 
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
-import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
-import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
+import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 
-class DagpengeHandler (pdfService: PdfService,journalpostService: JournalpostService):IHandleVurderinger {
+import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
+
+
+class DagpengeHandler (pdfService: IkanOpprettePdf,journalpostService: IKanJournalforePDF):IHandleVurderinger {
     override fun skalOpprettePDF(medlemskapVurdert: MedlemskapVurdert) :Boolean {
         TODO("Not yet implemented")
     }

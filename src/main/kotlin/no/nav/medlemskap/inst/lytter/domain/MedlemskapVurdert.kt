@@ -38,13 +38,23 @@ data class Navn(val fornavn: String, val mellomnavn: String?, val etternavn: Str
 
 data class Periode(val fom: LocalDate, val tom: LocalDate)
 
+data class Årsak (
+    val svar: String,
+    val avklaring: String,
+    val regelId: String,
+    val begrunnelse:String
+)
+
+
 data class Resultat(
     val svar: String,
     val dekning: String,
     val avklaring: String,
     val regelId: String,
-    val delresultat: List<Resultat>
+    val delresultat: List<Resultat>,
+    val årsaker:List<Årsak>
 ) {
+
     fun finnRegelResultat(resultat: Resultat, regelId: String): Resultat? {
         var regelResultat = finnDelresultat(resultat, regelId)
         if (regelResultat != null) {

@@ -6,6 +6,7 @@ import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.domain.Navn
+import no.nav.medlemskap.inst.lytter.domain.Årsak
 import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 
 class PdfService():IkanOpprettePdf {
@@ -52,7 +53,7 @@ class PdfService():IkanOpprettePdf {
                 medlemskapVurdering =  MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar),
                 ytelse = medlemskapVurdering.datagrunnlag.ytelse,
                 //medlemskapVurdering.resultat.
-                årsaker = emptyList<Regel>(),
+                årsaker = medlemskapVurdering.resultat.årsaker,
                 statsborger = ""
             )
         }
@@ -102,7 +103,7 @@ class PdfService():IkanOpprettePdf {
 
     }
 
-    class UavklartResponse(
+    data class UavklartResponse(
         val tidspunkt: String,
         val fnr: String,
         val fom: String,
@@ -110,7 +111,7 @@ class PdfService():IkanOpprettePdf {
         val navn: String,
         val statsborger:String,
         val ytelse:String,
-        val årsaker :List<Regel>,
+        val årsaker :List<Årsak>,
         val erNorskStatsborger: Boolean,
         val erTredjelandsborger: Boolean,
         val medlemskapVurdering: MedlemskapVurdering
