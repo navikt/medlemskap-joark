@@ -1,11 +1,7 @@
 package no.nav.medlemskap.inst.lytter.service
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
-import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService_dagpenger
-import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
-import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 class JournalpostServiceTest {

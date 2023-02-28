@@ -1,7 +1,7 @@
 package no.nav.medlemskap.inst.lytter.client
 import kotlinx.coroutines.GlobalScope
 import no.nav.medlemskap.inst.lytter.journalpost.*
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle

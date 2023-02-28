@@ -16,7 +16,7 @@ import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.io.Writer
 
 fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvironment {

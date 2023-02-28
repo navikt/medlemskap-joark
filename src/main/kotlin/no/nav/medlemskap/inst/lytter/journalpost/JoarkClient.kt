@@ -8,7 +8,7 @@ import io.ktor.http.*
 import no.nav.medlemskap.inst.lytter.http.runWithRetryAndMetrics
 import mu.KotlinLogging
 import no.nav.medlemskap.clients.azuread.AzureAdClient
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 
 
 class JoarkClient(

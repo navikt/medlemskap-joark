@@ -3,11 +3,8 @@ package no.nav.medlemskap.inst.lytter.pdfgenerator
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
-import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
-import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
-import no.nav.medlemskap.inst.lytter.domain.Navn
-import no.nav.medlemskap.inst.lytter.domain.Årsak
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.domain.*
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 
 class PdfService():IkanOpprettePdf {
     val configuration = Configuration()
@@ -42,7 +39,7 @@ class PdfService():IkanOpprettePdf {
             )
 
         } else {
-            UavklartResponse(
+            val uavklartResponse =UavklartResponse(
                 tidspunkt = medlemskapVurdering.tidspunkt,
                 fnr = medlemskapVurdering.datagrunnlag.fnr,
                 fom = medlemskapVurdering.datagrunnlag.periode.fom.toString(),
@@ -52,10 +49,10 @@ class PdfService():IkanOpprettePdf {
                 erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger,
                 medlemskapVurdering =  MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar),
                 ytelse = medlemskapVurdering.datagrunnlag.ytelse,
-                //medlemskapVurdering.resultat.
                 årsaker = medlemskapVurdering.resultat.årsaker,
-                statsborger = ""
+                statsborger = hentStatsborgerskap(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.statsborgerskap)
             )
+            return uavklartResponse
         }
 
     }
@@ -65,6 +62,11 @@ class PdfService():IkanOpprettePdf {
             null -> "${pdlNavn.fornavn} ${pdlNavn.etternavn}"
             else -> "${pdlNavn.fornavn} ${pdlNavn.mellomnavn} ${pdlNavn.etternavn}"
         }
+    }
+    fun hentStatsborgerskap(statsborger: List<Statsborgerskap>): String {
+        return statsborger.filter { !it.historisk }
+            .map { it.landkode }
+            .joinToString(" OG ")
     }
 
     interface Response {
@@ -119,6 +121,7 @@ class PdfService():IkanOpprettePdf {
         override fun getstatus(): MedlemskapVurdering {
             return MedlemskapVurdering.UAVKLART
         }
+
 
         override fun toJsonPrettyString(): String {
             return JaksonParser().ToJson(this).toPrettyString()

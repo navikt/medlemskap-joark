@@ -6,7 +6,7 @@ import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle

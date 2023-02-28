@@ -12,7 +12,7 @@ import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
 import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
-import no.nav.medlemskap.sykepenger.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.lang.Exception
 
 
