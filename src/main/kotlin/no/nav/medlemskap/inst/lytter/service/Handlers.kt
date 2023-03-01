@@ -8,7 +8,10 @@ import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 
 class DagpengeHandler (pdfService: IkanOpprettePdf,journalpostService: IKanJournalforePDF):IHandleVurderinger {
     override fun skalOpprettePDF(medlemskapVurdert: MedlemskapVurdert) :Boolean {
-        TODO("Not yet implemented")
+        return medlemskapVurdert.resultat.svar=="UAVKLART"
+                && medlemskapVurdert.datagrunnlag.ytelse=="DAGPENGER"
+                && medlemskapVurdert.resultat.årsaker.size == 1
+                && medlemskapVurdert.resultat.årsaker.first().regelId=="REGEL_19_1"
     }
 
 }

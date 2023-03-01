@@ -1,7 +1,7 @@
 package no.nav.medlemskap.inst.lytter.service
 
 import mu.KotlinLogging
-import net.logstash.logback.argument.StructuredArguments
+
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
@@ -13,6 +13,7 @@ import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.journalpost.JournalpostServiceDagpenger
 import java.lang.Exception
 
 
@@ -43,7 +44,7 @@ class JoarkService(
     ) {
         if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
-            val pdf = PdfService().opprettPfd(record, medlemskapVurdering)
+            val pdf = PdfService().opprettPfd(record.key, medlemskapVurdering)
             record.logOpprettetPdf()
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
@@ -67,10 +68,11 @@ class JoarkService(
         medlemskapVurdering: MedlemskapVurdert,
         record: MedlemskapVurdertRecord
     ) {
+        val journalpostService:IKanJournalforePDF = JournalpostServiceDagpenger()
         val handler = DagpengeHandler(pdfService,journalpostService)
         if (handler.skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
-            val pdf =pdfService.opprettPfd(record, medlemskapVurdering)
+            val pdf =pdfService.opprettPfd(record.key, medlemskapVurdering)
             record.logOpprettetPdf()
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",

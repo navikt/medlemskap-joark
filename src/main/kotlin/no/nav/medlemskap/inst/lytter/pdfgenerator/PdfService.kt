@@ -24,6 +24,12 @@ class PdfService():IkanOpprettePdf {
         val response = pdfClient.kallPDFGenerator(record.key, pdfRequest.getstatus(), pdfRequest)
         return response
     }
+    override suspend fun opprettPfd(callID:String, medlemskapVurdering: MedlemskapVurdert): ByteArray {
+        val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
+        secureLogger.info { "kaller PdfGenerator med følgende parameter : " + pdfRequest.toJsonPrettyString() }
+        val response = pdfClient.kallPDFGenerator(callID, pdfRequest.getstatus(), pdfRequest)
+        return response
+    }
 
     fun mapRecordToRequestObject(medlemskapVurdering: MedlemskapVurdert): Response {
         return if (medlemskapVurdering.resultat.svar == "JA") {
@@ -123,5 +129,6 @@ class PdfService():IkanOpprettePdf {
 
 interface IkanOpprettePdf {
     suspend fun opprettPfd(record: MedlemskapVurdertRecord, medlemskapVurdering: MedlemskapVurdert): ByteArray
-    }
+    suspend fun opprettPfd(callID:String, medlemskapVurdering: MedlemskapVurdert): ByteArray
+}
 
