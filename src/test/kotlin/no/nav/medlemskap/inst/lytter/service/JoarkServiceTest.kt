@@ -40,7 +40,7 @@ class JoarkServiceTest {
 
     @Test
     fun `mapping til Uavklart Respons skal ha annen URL `(){
-        val fileContent = this::class.java.classLoader.getResource("REGEL_19_1_sample.json").readText(Charsets.UTF_8)
+        val fileContent = this::class.java.classLoader.getResource("regel_19_1_sample.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
         val uavklart = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
         Assertions.assertTrue(uavklart is PdfService.UavklartResponse)
