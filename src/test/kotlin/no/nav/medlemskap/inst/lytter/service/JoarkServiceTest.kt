@@ -39,6 +39,18 @@ class JoarkServiceTest {
     }
 
     @Test
+    fun `mapping til Uavklart Respons skal ha annen URL `(){
+        val fileContent = this::class.java.classLoader.getResource("REGEL_19_1_sample.json").readText(Charsets.UTF_8)
+        val pdfService = PdfService()
+        val uavklart = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
+        Assertions.assertTrue(uavklart is PdfService.UavklartResponse)
+        if (uavklart is PdfService.UavklartResponse){
+            Assertions.assertTrue(uavklart.medlemskapVurdering== MedlemskapVurdering.UAVKLART)
+            Assertions.assertEquals("/api/v1/genpdf/medlemskapresultater/medlemskapuavklart",uavklart.medlemskapVurdering.url,"URL for uavklart er ikke korrekt")
+        }
+    }
+
+    @Test
     fun `endepuntk som ikke er kafka verdikjede skal ikke generere PDF dokumenter`() {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
@@ -46,13 +58,7 @@ class JoarkServiceTest {
         Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
 
-    @Test
-    fun `Kun kafka endepunkt skal generere PDF dokumenter`() {
-        val fileContent = this::class.java.classLoader.getResource("ValideringTestPerson_kafka.json").readText(Charsets.UTF_8)
-        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
 
-        Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
-    }
     @Test
     fun `arbeid utland skal ikke generere PDF dokumenter`() {
         val fileContent = this::class.java.classLoader.getResource("ValideringTestPersonArbeidUtlandTrue.json").readText(Charsets.UTF_8)

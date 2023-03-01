@@ -32,7 +32,7 @@ class JoarkService(
         when (medlemskapVurdering.datagrunnlag.ytelse){
          "SYKEPENGER" ->handleSykepengeRecord(medlemskapVurdering, record)
          "DAGPENGER" -> handleDagppengeRecord(medlemskapVurdering,record)
-            else -> log.warn("Ytelse ikke støttet")
+            else -> log.warn("Ytelsen ${medlemskapVurdering.datagrunnlag.ytelse} er ikke støttet. Ingen dokument opprettet i JOARK")
         }
 
     }
@@ -74,8 +74,8 @@ class JoarkService(
             record.logOpprettetPdf()
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
-                StructuredArguments.kv("callId", record.key),
-                StructuredArguments.kv("fnr", medlemskapVurdering.datagrunnlag.fnr)
+                kv("callId", record.key),
+                kv("fnr", medlemskapVurdering.datagrunnlag.fnr)
             )
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response != null) {
@@ -107,25 +107,25 @@ class JoarkService(
         }
     }
      private fun MedlemskapVurdertRecord.logFiltrert() =
-        JoarkService.log.warn(
+        log.warn(
             "Melding filtrert pga validerings logikk ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
 
     private fun MedlemskapVurdertRecord.logOpprettetPdf() =
-        JoarkService.log.info(
+        log.info(
             "PDF opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
 
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
-        JoarkService.log.info(
+        log.info(
             "Dokument opprettet for ytelse : ${this.getYtelse()} i Joark ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
 
     private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =
-        JoarkService.log.warn(
+        log.warn(
             "Dokument Ikke opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )

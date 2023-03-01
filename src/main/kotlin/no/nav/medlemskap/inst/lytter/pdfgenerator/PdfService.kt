@@ -95,16 +95,6 @@ class PdfService():IkanOpprettePdf {
 
     }
 
-    class Regel(
-        val regelId:String,
-        val avklaring:String,
-        val svar:String,
-        val begrunnelse:String,
-        val beskrivelse:String
-    ) {
-
-    }
-
     data class UavklartResponse(
         val tidspunkt: String,
         val fnr: String,
@@ -116,7 +106,7 @@ class PdfService():IkanOpprettePdf {
         val årsaker :List<Årsak>,
         val erNorskStatsborger: Boolean,
         val erTredjelandsborger: Boolean,
-        val medlemskapVurdering: MedlemskapVurdering
+        val medlemskapVurdering: vurdering
     ) : Response {
         override fun getstatus(): MedlemskapVurdering {
             return MedlemskapVurdering.UAVKLART
