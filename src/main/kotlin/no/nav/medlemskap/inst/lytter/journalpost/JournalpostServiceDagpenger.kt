@@ -1,7 +1,7 @@
 package no.nav.medlemskap.inst.lytter.journalpost
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.ktor.client.features.ResponseException
+import io.ktor.client.plugins.*
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
