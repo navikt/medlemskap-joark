@@ -22,7 +22,7 @@ class JournalpostService() :IKanJournalforePDF {
         configuration = configuration
     )
     val journalfoerendeEnhet="9999"
-    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+    val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     companion object {
         private val log = KotlinLogging.logger { }
 
