@@ -3,6 +3,7 @@ package no.nav.medlemskap.inst.lytter.journalpost
 import com.fasterxml.jackson.databind.JsonNode
 import io.github.resilience4j.retry.Retry
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import no.nav.medlemskap.inst.lytter.http.runWithRetryAndMetrics
@@ -30,8 +31,8 @@ class JoarkClient(
                  header(HttpHeaders.Authorization, "Bearer ${token.token}")
                  header("Nav-Call-Id", callId)
                  header("X-Correlation-Id", callId)
-                 body = JaksonParser().ToJson(journalpostRequest)
-             }
+                 setBody(JaksonParser().ToJson(journalpostRequest))
+             }.body()
 
          }
      }
