@@ -44,7 +44,7 @@ class JoarkService(
     ) {
         if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
-            val pdf = PdfService().opprettPfd(record.key, medlemskapVurdering)
+            val pdf = pdfService.opprettPfd(record.key, medlemskapVurdering)
             record.logOpprettetPdf()
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
