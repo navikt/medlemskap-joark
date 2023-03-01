@@ -18,7 +18,7 @@ class JournalpostServiceTest {
         val record = MedlemskapVurdertRecord(0,0,"","","",fileContent)
         val service = JournalpostServiceDagpenger()
         val response =  service.mapRecordToRequestObject(record,ByteArray(1))
-        Assertions.assertEquals("UDI-tjenesten kan ikke gi et automatisk svar",response.tittel,"Tittel på dokument er ikke korrekt!")
+        Assertions.assertEquals("UDI-tjenesten kan ikke gi et automatisk svar",response.tittel,"Tittel på dokument er ikke korrekt!. Teksten er : ${response.tittel}")
         print(response)
     }
     @Test
