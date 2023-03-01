@@ -1,7 +1,7 @@
 package no.nav.medlemskap.inst.lytter.journalpost
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.ktor.client.features.*
+import io.ktor.client.features.ResponseException
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 
-class JournalpostService_dagpenger() :IKanJournalforePDF {
+class JournalpostServiceDagpenger() :IKanJournalforePDF {
     val tema = "MED"
     val behandlingstema = null
     val kanal = null
