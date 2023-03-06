@@ -60,7 +60,7 @@ class JournalpostServiceDagpenger() :IKanJournalforePDF {
     }
     fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
         val medlemskapVurdert = JaksonParser().parseToObject(record.json)
-        val tittel = medlemskapVurdert.resultat.årsaker[0].begrunnelse
+        val tittel = "${medlemskapVurdert.datagrunnlag.ytelse} - ${medlemskapVurdert.resultat.årsaker[0].begrunnelse}"
         val request = JournalpostRequest(
             tittel,
             JournalPostType.NOTAT,
