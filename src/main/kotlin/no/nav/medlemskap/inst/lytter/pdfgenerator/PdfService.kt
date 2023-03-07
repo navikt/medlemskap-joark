@@ -72,7 +72,7 @@ class PdfService():IkanOpprettePdf {
     fun hentStatsborgerskap(statsborger: List<Statsborgerskap>): String {
         return statsborger.filter { !it.historisk }
             .map { it.landkode }
-            .joinToString(" OG ")
+            .joinToString(" og ")
     }
 
     interface Response {
