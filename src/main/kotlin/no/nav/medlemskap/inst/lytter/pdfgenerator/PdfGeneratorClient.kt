@@ -13,7 +13,7 @@ class PdfGeneratorClient(
     private val retry: Retry? = null
 ) {
 
-    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: MedlemskapVurdering, pdfRequest: PdfService.Response): ByteArray {
+    suspend fun kallPDFGenerator(callId: String, medlemskapVurdering: vurdering, pdfRequest: PdfService.Response): ByteArray {
         return runWithRetryAndMetrics("MEDL-OPPSLAG-PDFGEN", "vurdermedlemskap", retry) {
             httpClient.post {
                 url("${baseUrl}${medlemskapVurdering.url}")

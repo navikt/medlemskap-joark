@@ -12,8 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 
-class JournalpostService() :IKanJournalforePDF {
-    val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr. "
+class JournalpostServiceDagpenger() :IKanJournalforePDF {
     val tema = "MED"
     val behandlingstema = null
     val kanal = null
@@ -22,7 +21,7 @@ class JournalpostService() :IKanJournalforePDF {
         configuration = configuration
     )
     val journalfoerendeEnhet="9999"
-    val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     companion object {
         private val log = KotlinLogging.logger { }
 
@@ -61,7 +60,7 @@ class JournalpostService() :IKanJournalforePDF {
     }
     fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
         val medlemskapVurdert = JaksonParser().parseToObject(record.json)
-        val tittel = dokumentnavnJA+medlemskapVurdert.datagrunnlag.periode.fom.format(dateFormat)
+        val tittel = "${medlemskapVurdert.datagrunnlag.ytelse} - ${medlemskapVurdert.resultat.årsaker[0].begrunnelse}"
         val request = JournalpostRequest(
             tittel,
             JournalPostType.NOTAT,
@@ -87,9 +86,4 @@ class JournalpostService() :IKanJournalforePDF {
     fun getStringAsDate(string:String):LocalDate{
         return LocalDate.parse(string)
     }
-}
-
-interface IKanJournalforePDF {
-    suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?
-    suspend fun lagrePdfTilJoark(callId:String,journalpostRequest: JournalpostRequest):JsonNode?
 }
