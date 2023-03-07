@@ -38,7 +38,7 @@ class PdfServiceTest {
         val tekst =  PdfService().hentStatsborgerskap(list)
         println(tekst)
         Assertions.assertFalse(tekst.isNullOrBlank())
-        Assertions.assertTrue(tekst == "NOR OG SWE")
+        Assertions.assertTrue(tekst == "NOR og SWE")
 
 
 
