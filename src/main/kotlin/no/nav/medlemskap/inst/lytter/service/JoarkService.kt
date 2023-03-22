@@ -32,7 +32,7 @@ class JoarkService(
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
         when (medlemskapVurdering.datagrunnlag.ytelse){
          "SYKEPENGER" ->handleSykepengeRecord(medlemskapVurdering, record)
-         "DAGPENGER" -> handleDagppengeRecord(medlemskapVurdering,record)
+         //"DAGPENGER" -> handleDagppengeRecord(medlemskapVurdering,record)
             else -> log.warn("Ytelsen ${medlemskapVurdering.datagrunnlag.ytelse} er ikke støttet. Ingen dokument opprettet i JOARK")
         }
 
