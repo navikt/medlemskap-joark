@@ -39,6 +39,8 @@ spec:
     pool: nav-prod
   accessPolicy:
     outbound:
+      rules:
+        - application: medlemskap-oppslag-pdfgen
       external:
         - host: api-gw.oera.no
         - host: saf.prod-fss-pub.nais.io
