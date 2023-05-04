@@ -41,6 +41,8 @@ spec:
     pool: nav-dev
   accessPolicy:
     outbound:
+      rules:
+        - application: medlemskap-oppslag-pdfgen
       external:
         - host: api-gw-q1.oera.no
         - host: api-gw-q2.oera.no
