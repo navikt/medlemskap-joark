@@ -48,7 +48,7 @@ spec:
         - host: dokarkiv.prod-fss-pub.nais.io
   env:
     - name: PDF_GEN_BASE_URL
-      value: https://medlemskap-oppslag-pdfgen.intern.nav.no
+      value: http://medlemskap-oppslag-pdfgen.medlemskap.svc.cluster.local
     - name: AZURE_TENANT
       value: 966ac572-f5b7-4bbe-aa88-c76419c0f851
     - name: AZURE_AUTHORITY_ENDPOINT
