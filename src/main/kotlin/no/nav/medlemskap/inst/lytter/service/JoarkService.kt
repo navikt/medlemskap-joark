@@ -44,7 +44,7 @@ class JoarkService(
         record: MedlemskapVurdertRecord
     ) {
         if (skalOpprettePDF(medlemskapVurdering)) {
-            loggPdfOpprettetTilSecurelogger(medlemskapVurdering, record)
+            loggOgLagrePdfTilJoark(medlemskapVurdering, record)
         } else {
             record.logFiltrert()
         }
@@ -82,7 +82,7 @@ class JoarkService(
         }
     }
 
-    private fun loggPdfOpprettetTilSecurelogger(
+    private suspend fun loggPdfOpprettetTilSecurelogger(
         medlemskapVurdering: MedlemskapVurdert,
         record: MedlemskapVurdertRecord
     ) {
