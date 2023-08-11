@@ -35,7 +35,11 @@ class JaksonMapperTest {
         Assertions.assertFalse(parsed.finnRegelResultat("REGEL_109")?.svar=="TRUE")
     }
 
-
-
+    @Test
+    fun `mapping til medlemskapvurdert med MEDL data`(){
+        val fileContent = this::class.java.classLoader.getResource("NeiVurdering_1_3_5.json").readText(Charsets.UTF_8)
+        val parsed = JaksonParser().parseToObject(fileContent)
+        Assertions.assertNotNull(parsed)
+    }
 
 }
