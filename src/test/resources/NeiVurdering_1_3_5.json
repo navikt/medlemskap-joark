@@ -75,19 +75,19 @@
         "relatertVedSivilstand" : "10987654321"
       } ],
       "forelderBarnRelasjon" : [ {
-        "relatertPersonsIdent" : "321456789010",
+        "relatertPersonsIdent" : "55555555555",
         "relatertPersonsRolle" : "MOR",
         "minRolleForPerson" : "BARN"
       }, {
-        "relatertPersonsIdent" : "91234567810",
+        "relatertPersonsIdent" : "66666666666",
         "relatertPersonsRolle" : "BARN",
         "minRolleForPerson" : "FAR"
       }, {
-        "relatertPersonsIdent" : "43215678910",
+        "relatertPersonsIdent" : "77777777777",
         "relatertPersonsRolle" : "BARN",
         "minRolleForPerson" : "FAR"
       }, {
-        "relatertPersonsIdent" : "54321678910",
+        "relatertPersonsIdent" : "88888888888",
         "relatertPersonsRolle" : "FAR",
         "minRolleForPerson" : "BARN"
       } ],
@@ -102,9 +102,9 @@
         }
       } ],
       "navn" : [ {
-        "fornavn" : "MORTEN",
+        "fornavn" : "Oppdiktet",
         "mellomnavn" : null,
-        "etternavn" : "INGEBRIGTSEN"
+        "etternavn" : "Navn"
       } ]
     },
     "medlemskap" : [ {
