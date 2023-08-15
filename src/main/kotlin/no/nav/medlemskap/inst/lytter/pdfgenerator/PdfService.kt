@@ -79,8 +79,8 @@ class PdfService() : IkanOpprettePdf {
                         fnr = medlemskapVurdering.datagrunnlag.fnr,
                         fom = periode.fom.toString(),
                         tom = periode.tom.toString(),
-                        MEDLfom = medlInnslag.fraOgMed.toString(),
-                        MEDLtom = medlInnslag.tilOgMed.toString(),
+                        medlfom = medlInnslag.fraOgMed.toString(),
+                        medltom = medlInnslag.tilOgMed.toString(),
                         lovvalgsland = medlInnslag.lovvalgsland.toString(),
                         erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger
                 )
@@ -155,17 +155,17 @@ class PdfService() : IkanOpprettePdf {
     }
 
     data class NeiResponse(
-            val tidspunkt: String,
-            val opprettet: String,
-            val ytelse: String,
-            val navn: String,
-            val fnr: String,
-            val fom: String,
-            val tom: String,
-            val MEDLfom: String,
-            val MEDLtom: String,
-            val lovvalgsland: String,
-            val erTredjelandsborger: Boolean
+        val tidspunkt: String,
+        val opprettet: String,
+        val ytelse: String,
+        val navn: String,
+        val fnr: String,
+        val fom: String,
+        val tom: String,
+        val medlfom: String,
+        val medltom: String,
+        val lovvalgsland: String,
+        val erTredjelandsborger: Boolean
     ) : Response {
         override fun getstatus(): MedlemskapVurdering {
             return MedlemskapVurdering.NEI

@@ -30,4 +30,13 @@ class JournalpostServiceTest {
         Assertions.assertEquals("Automatisk vurdering: Er medlem i folketrygden pr. 21.08.2021",response.tittel,"Tittel på dokument er ikke korrekt! Teksten er : ${response.tittel}")
         print(response)
     }
+    @Test
+    fun `Sykepenger nei svar skal ha eget dokument navn`(){
+        val fileContent = this::class.java.classLoader.getResource("Neivurdering_1_3_5.json").readText(Charsets.UTF_8)
+        val record = MedlemskapVurdertRecord(0,0,"","","",fileContent)
+        val service = JournalpostService()
+        val response =  service.mapRecordToRequestObject(record,ByteArray(1))
+        Assertions.assertEquals("Automatisk vurdering - Ikke medlem i folketrygden basert på opplysninger fra registeret MEDL", response.tittel, "Tittelen er ikke korrekt")
+        print(response)
+    }
 }

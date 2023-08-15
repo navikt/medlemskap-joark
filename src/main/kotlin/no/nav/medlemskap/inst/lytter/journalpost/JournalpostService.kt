@@ -5,6 +5,7 @@ import io.ktor.client.plugins.*
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
+import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.time.LocalDate
@@ -61,7 +62,7 @@ class JournalpostService() :IKanJournalforePDF {
     }
     fun mapRecordToRequestObject(record : MedlemskapVurdertRecord,pdf:ByteArray): JournalpostRequest {
         val medlemskapVurdert = JaksonParser().parseToObject(record.json)
-        val tittel = dokumentnavnJA+medlemskapVurdert.datagrunnlag.periode.fom.format(dateFormat)
+        val tittel = medlemskapVurdert.getDokTittel(dateFormat)
         val request = JournalpostRequest(
             tittel,
             JournalPostType.NOTAT,
@@ -92,4 +93,12 @@ class JournalpostService() :IKanJournalforePDF {
 interface IKanJournalforePDF {
     suspend fun lagrePdfTilJoark(record : MedlemskapVurdertRecord,pdf: ByteArray):JsonNode?
     suspend fun lagrePdfTilJoark(callId:String,journalpostRequest: JournalpostRequest):JsonNode?
+}
+
+fun MedlemskapVurdert.getDokTittel(dateFormat:DateTimeFormatter):String {
+    return when(this.resultat.svar) {
+        "JA" -> "Automatisk vurdering: Er medlem i folketrygden pr. ${this.datagrunnlag.periode.fom.format(dateFormat)}"
+        "NEI" -> "Automatisk vurdering - Ikke medlem i folketrygden basert på opplysninger fra registeret MEDL"
+        else -> "Automatisk vurdering - Medlemskapet er uavklart"
+    }
 }
