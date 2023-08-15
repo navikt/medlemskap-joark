@@ -32,7 +32,7 @@ class JournalpostServiceTest {
     }
     @Test
     fun `Sykepenger nei svar skal ha eget dokument navn`(){
-        val fileContent = this::class.java.classLoader.getResource("Neivurdering_1_3_5.json").readText(Charsets.UTF_8)
+        val fileContent = this::class.java.classLoader.getResource("NeiVurdering_1_3_5.json").readText(Charsets.UTF_8)
         val record = MedlemskapVurdertRecord(0,0,"","","",fileContent)
         val service = JournalpostService()
         val response =  service.mapRecordToRequestObject(record,ByteArray(1))
