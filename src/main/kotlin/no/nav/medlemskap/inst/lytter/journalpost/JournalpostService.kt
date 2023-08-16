@@ -98,7 +98,7 @@ interface IKanJournalforePDF {
 fun MedlemskapVurdert.getDokTittel(dateFormat:DateTimeFormatter):String {
     return when(this.resultat.svar) {
         "JA" -> "Automatisk vurdering: Er medlem i folketrygden pr. ${this.datagrunnlag.periode.fom.format(dateFormat)}"
-        "NEI" -> "Automatisk vurdering - Ikke medlem i folketrygden basert på opplysninger fra registeret MEDL"
+        "NEI" -> "Automatisk vurdering - Ikke medlem i folketrygden"
         else -> "Automatisk vurdering - Medlemskapet er uavklart"
     }
 }
