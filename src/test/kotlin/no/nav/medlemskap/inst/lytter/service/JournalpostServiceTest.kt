@@ -36,7 +36,7 @@ class JournalpostServiceTest {
         val record = MedlemskapVurdertRecord(0,0,"","","",fileContent)
         val service = JournalpostService()
         val response =  service.mapRecordToRequestObject(record,ByteArray(1))
-        Assertions.assertEquals("Automatisk vurdering - Ikke medlem i folketrygden basert på opplysninger fra registeret MEDL", response.tittel, "Tittelen er ikke korrekt")
+        Assertions.assertEquals("Automatisk vurdering - Ikke medlem i folketrygden", response.tittel, "Tittelen er ikke korrekt")
         print(response)
     }
 }
