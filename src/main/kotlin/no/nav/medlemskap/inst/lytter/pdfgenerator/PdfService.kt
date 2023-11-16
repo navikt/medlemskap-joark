@@ -7,6 +7,9 @@ import no.nav.medlemskap.inst.lytter.domain.*
 import no.nav.medlemskap.inst.lytter.domain.Medlemskap.Companion.brukerensFørsteMEDLUnntakIPeriode
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.lang.IllegalStateException
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class PdfService() : IkanOpprettePdf {
     val configuration = Configuration()
@@ -77,10 +80,10 @@ class PdfService() : IkanOpprettePdf {
                         ytelse = medlemskapVurdering.datagrunnlag.ytelse,
                         navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                         fnr = medlemskapVurdering.datagrunnlag.fnr,
-                        fom = periode.fom.toString(),
-                        tom = periode.tom.toString(),
-                        medlfom = medlInnslag.fraOgMed.toString(),
-                        medltom = medlInnslag.tilOgMed.toString(),
+                        fom = parseDatoTilNorskFormat(periode.fom),
+                        tom = parseDatoTilNorskFormat(periode.tom),
+                        medlfom = parseDatoTilNorskFormat(medlInnslag.fraOgMed),
+                        medltom = parseDatoTilNorskFormat(medlInnslag.tilOgMed),
                         lovvalgsland = medlInnslag.lovvalgsland.toString(),
                         erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger
                 )
@@ -89,6 +92,11 @@ class PdfService() : IkanOpprettePdf {
             else -> throw IllegalStateException("${medlemskapVurdering.resultat.svar} er en ulovlig verdi")
         }
 
+    }
+
+    fun parseDatoTilNorskFormat(dato:LocalDate):String {
+        val norskDatoFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        return dato.format(norskDatoFormat)
     }
 
     fun slåSammenNavn(pdlNavn: Navn): String {

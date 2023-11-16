@@ -5,6 +5,9 @@ import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class JoarkServiceTest {
 
@@ -21,6 +24,13 @@ class JoarkServiceTest {
             Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
             Assertions.assertEquals("Test Person", jaRequest.navn)
         }
+    }
+
+    @Test
+    fun `Formattering på dato er norsk standard`() {
+        val pdfService = PdfService()
+        val dato = LocalDate.parse("2003-08-01")
+        Assertions.assertEquals("01.08.2003",pdfService.parseDatoTilNorskFormat(dato))
     }
 
     @Test
