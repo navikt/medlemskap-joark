@@ -5,10 +5,7 @@ import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
-import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdert
-import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
-import no.nav.medlemskap.inst.lytter.domain.getYtelse
-import no.nav.medlemskap.inst.lytter.domain.ytelserSomKanGenererePDF
+import no.nav.medlemskap.inst.lytter.domain.*
 import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
@@ -103,7 +100,7 @@ class JoarkService(
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
         return try {
             //vi skal kun opprette dokumenter for JA svar og for de som blir kalt via Kafa
-            medlemskapVurdert.resultat.svar == "JA" && medlemskapVurdert.kanal=="kafka" && !medlemskapVurdert.datagrunnlag.brukerinput.arbeidUtenforNorge
+            medlemskapVurdert.finnsvar() ==  "JA" && medlemskapVurdert.kanal=="kafka" && !medlemskapVurdert.datagrunnlag.brukerinput.harBrukerUtfortArbeidUtenforNorge()
         } catch (e: Exception) {
             false
         }

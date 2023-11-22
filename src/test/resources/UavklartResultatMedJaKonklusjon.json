@@ -1,0 +1,430 @@
+{
+  "tidspunkt" : "2023-11-21T15:43:17.837963",
+  "versjonTjeneste" : "94b5ef9",
+  "versjonRegler" : "v1",
+  "kanal" : "kafka",
+  "datagrunnlag" : {
+    "fnr" : "18508847692",
+    "periode" : {
+      "fom" : "2023-11-11",
+      "tom" : "2023-11-12"
+    },
+    "førsteDagForYtelse" : "2023-11-11",
+    "brukerinput" : {
+      "arbeidUtenforNorge" : false,
+      "oppholdstilatelse" : null,
+      "utfortAarbeidUtenforNorge" : {
+        "id" : "d3bdffc2-f3c3-3e38-b472-ea0c11fcb44f",
+        "sporsmalstekst" : "Har du arbeidet utenfor Norge i løpet av de siste 12 månedene før du ble syk?",
+        "svar" : false,
+        "arbeidUtenforNorge" : [ ]
+      },
+      "oppholdUtenforEos" : {
+        "id" : "8d02de5d-e5b3-3113-99de-07c2fd5cbc51",
+        "sporsmalstekst" : "Har du oppholdt deg utenfor EØS i løpet av de siste 12 månedene før du ble syk?",
+        "svar" : false,
+        "oppholdUtenforEOS" : [ ]
+      },
+      "oppholdUtenforNorge" : null
+    },
+    "pdlpersonhistorikk" : {
+      "statsborgerskap" : [ {
+        "landkode" : "NOR",
+        "fom" : "1988-10-18",
+        "tom" : null,
+        "historisk" : false
+      } ],
+      "bostedsadresser" : [ {
+        "landkode" : "NOR",
+        "fom" : "1988-10-18",
+        "tom" : null,
+        "historisk" : false
+      } ],
+      "kontaktadresser" : [ ],
+      "oppholdsadresser" : [ ],
+      "sivilstand" : [ ],
+      "forelderBarnRelasjon" : [ ],
+      "doedsfall" : [ ],
+      "innflyttingTilNorge" : [ ],
+      "utflyttingFraNorge" : [ ],
+      "navn" : [ {
+        "fornavn" : "ÄNGSLIG",
+        "mellomnavn" : null,
+        "etternavn" : "BLÅVEIS"
+      } ]
+    },
+    "medlemskap" : [ ],
+    "arbeidsforhold" : [ {
+      "periode" : {
+        "fom" : "2023-07-01",
+        "tom" : null
+      },
+      "utenlandsopphold" : null,
+      "arbeidsgivertype" : "Organisasjon",
+      "arbeidsgiver" : {
+        "organisasjonsnummer" : "896929119",
+        "ansatte" : null,
+        "konkursStatus" : null,
+        "juridiskeEnheter" : [ {
+          "organisasjonsnummer" : "963743254",
+          "enhetstype" : "AS",
+          "antallAnsatte" : null
+        } ]
+      },
+      "arbeidsforholdstype" : "NORMALT",
+      "arbeidsavtaler" : [ {
+        "periode" : {
+          "fom" : "2023-11-21",
+          "tom" : null
+        },
+        "gyldighetsperiode" : {
+          "fom" : "2023-07-01",
+          "tom" : null
+        },
+        "yrkeskode" : "3310101",
+        "skipsregister" : null,
+        "fartsomraade" : null,
+        "stillingsprosent" : 100.0,
+        "beregnetAntallTimerPrUke" : 37.5,
+        "skipstype" : null
+      } ],
+      "permisjonPermittering" : null
+    } ],
+    "oppgaver" : [ ],
+    "dokument" : [ ],
+    "ytelse" : "SYKEPENGER",
+    "dataOmBarn" : [ ],
+    "dataOmEktefelle" : null,
+    "overstyrteRegler" : { },
+    "oppholdstillatelse" : null,
+    "startDatoForYtelse" : "2023-11-11"
+  },
+  "resultat" : {
+    "regelId" : "REGEL_MEDLEM_KONKLUSJON",
+    "svar" : "UAVKLART",
+    "begrunnelse" : "Kan ikke konkludere med medlemskap",
+    "harDekning" : null,
+    "dekning" : "",
+    "delresultat" : [ {
+      "regelId" : "REGEL_DOED",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_13",
+        "svar" : "NEI",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker død?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Er det avklart om brukeren er død eller ikke?"
+    }, {
+      "regelId" : "REGEL_FELLES_ARBEIDSFORHOLD",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_17",
+        "svar" : "JA",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Har bruker arbeidsforhold?"
+      }, {
+        "regelId" : "REGEL_17_1",
+        "svar" : "NEI",
+        "begrunnelse" : "Bruker er ikke frilanser",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker frilanser?"
+      }, {
+        "regelId" : "REGEL_22",
+        "svar" : "NEI",
+        "begrunnelse" : "Det finnes ikke utenlandsopphold i et av arbeidsforholdene de siste 12 månedene",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Arbeidsforhold siste 12 måneder: finnes det utenlandsopphold i et av disse arbeidsforholdene?"
+      }, {
+        "regelId" : "REGEL_21",
+        "svar" : "JA",
+        "begrunnelse" : "Bruker er arbeidstaker i kontrollperiode for stønadsområde",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker arbeidstaker i kontrollperiode for stønadsområde?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Er felles regler for arbeidsforhold avklart?"
+    }, {
+      "regelId" : "REGEL_STATSBORGERSKAP",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_2",
+        "svar" : "JA",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker omfattet av grunnforordningen (EØS)? Dvs er bruker statsborger i et EØS-land inkl. Norge?"
+      }, {
+        "regelId" : "REGEL_11",
+        "svar" : "JA",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker norsk statsborger?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Er statsborgerskap avklart?"
+    }, {
+      "regelId" : "REGEL_MEDL",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_OPPLYSNINGER",
+        "svar" : "NEI",
+        "begrunnelse" : "Alle de følgende ble NEI",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ {
+          "regelId" : "REGEL_A",
+          "svar" : "NEI",
+          "begrunnelse" : "",
+          "harDekning" : null,
+          "dekning" : "",
+          "delresultat" : [ ],
+          "årsaker" : [ ],
+          "avklaring" : "Finnes det registrerte opplysninger i MEDL?"
+        }, {
+          "regelId" : "REGEL_C",
+          "svar" : "NEI",
+          "begrunnelse" : "",
+          "harDekning" : null,
+          "dekning" : "",
+          "delresultat" : [ ],
+          "årsaker" : [ ],
+          "avklaring" : "Finnes det dokumenter i JOARK på medlemskapsområdet?"
+        }, {
+          "regelId" : "REGEL_B",
+          "svar" : "NEI",
+          "begrunnelse" : "",
+          "harDekning" : null,
+          "dekning" : "",
+          "delresultat" : [ ],
+          "årsaker" : [ ],
+          "avklaring" : "Finnes det åpne oppgaver i GOSYS på medlemskapsområdet?"
+        } ],
+        "årsaker" : [ ],
+        "avklaring" : "Finnes det registrerte opplysninger på bruker?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Har bruker avklarte opplysninger i MEDL?"
+    }, {
+      "regelId" : "REGEL_ARBEIDSFORHOLD",
+      "svar" : "UAVKLART",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_3",
+        "svar" : "NEI",
+        "begrunnelse" : "Arbeidstaker har ikke sammenhengende arbeidsforhold siste 12 mnd",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Har bruker hatt et sammenhengende arbeidsforhold i Aa-registeret de siste 12 månedene?"
+      } ],
+      "årsaker" : [ {
+        "regelId" : "REGEL_3",
+        "avklaring" : "Har bruker hatt et sammenhengende arbeidsforhold i Aa-registeret de siste 12 månedene?",
+        "svar" : "NEI",
+        "begrunnelse" : "Arbeidstaker har ikke sammenhengende arbeidsforhold siste 12 mnd"
+      } ],
+      "avklaring" : "Er arbeidsforhold avklart?"
+    }, {
+      "regelId" : "REGEL_BOSATT",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_10",
+        "svar" : "JA",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er bruker folkeregistrert som bosatt i Norge og har vært det i 12 mnd?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Er det avklart om bruker bor i Norge?"
+    }, {
+      "regelId" : "REGEL_NORSK",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "delresultat" : [ {
+        "regelId" : "REGEL_9",
+        "svar" : "NEI",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Har bruker utført arbeid utenfor Norge?"
+      }, {
+        "regelId" : "REGEL_12",
+        "svar" : "JA",
+        "begrunnelse" : "",
+        "harDekning" : null,
+        "dekning" : "",
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Har bruker vært i minst 25% stilling de siste 12 mnd?"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Er regler for norske borgere avklart?"
+    } ],
+    "årsaker" : [ {
+      "regelId" : "REGEL_3",
+      "avklaring" : "Har bruker hatt et sammenhengende arbeidsforhold i Aa-registeret de siste 12 månedene?",
+      "svar" : "NEI",
+      "begrunnelse" : "Arbeidstaker har ikke sammenhengende arbeidsforhold siste 12 mnd"
+    } ],
+    "avklaring" : "Er bruker medlem?"
+  },
+  "konklusjon" : [ {
+    "hvem" : "SP6000",
+    "dato" : "2023-11-21",
+    "status" : "JA",
+    "lovvalg" : null,
+    "medlemskap" : {
+      "erMedlem" : "JA",
+      "ftlHjemmel" : "§2-1"
+    },
+    "dekningForSP" : "JA",
+    "utledetInformasjoner" : [ {
+      "informasjon" : "NORSK_BORGER",
+      "kilde" : [ "REGEL_11" ]
+    }, {
+      "informasjon" : "EØS_BORGER",
+      "kilde" : [ "REGEL_2" ]
+    } ],
+    "reglerKjørt" : [ {
+      "regelId" : "SP6001",
+      "svar" : "JA",
+      "begrunnelse" : "Årsaker i gammel kjøring tilsier at halen skal kjøres",
+      "harDekning" : null,
+      "dekning" : "",
+      "utledetInformasjon" : [ ],
+      "delresultat" : [ ],
+      "årsaker" : [ ],
+      "avklaring" : "Skal regelmotor prosessere gammel kjøring"
+    }, {
+      "regelId" : "ARBEID_UTLAND_FLYT",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "utledetInformasjon" : [ ],
+      "delresultat" : [ {
+        "regelId" : "SP6110",
+        "svar" : "JA",
+        "begrunnelse" : "Brukersvar for arbeid utland på ny modell finnes",
+        "harDekning" : null,
+        "dekning" : "",
+        "utledetInformasjon" : [ ],
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Er ny modell for ArbeidUtland oppgitt"
+      }, {
+        "regelId" : "SP6120",
+        "svar" : "JA",
+        "begrunnelse" : "bruker har oppgitt NEI i arbeid utland ny modell",
+        "harDekning" : null,
+        "dekning" : "",
+        "utledetInformasjon" : [ ],
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "har bruker oppgitt NEI i arbeid utland ny modell"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Har bruker på noen måte gitt svar på arbeid utland?"
+    }, {
+      "regelId" : "SP6002",
+      "svar" : "JA",
+      "begrunnelse" : "Bruker har oppgitt NEI i Opphold utenfor EØS",
+      "harDekning" : null,
+      "dekning" : "",
+      "utledetInformasjon" : [ ],
+      "delresultat" : [ {
+        "regelId" : "SP6003",
+        "svar" : "JA",
+        "begrunnelse" : "Det finnes brukersvar for OppholdUtenforEØS",
+        "harDekning" : null,
+        "dekning" : "",
+        "utledetInformasjon" : [ ],
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Finnes brukersvar for OppholdUtenfor EØS"
+      }, {
+        "regelId" : "SP6002",
+        "svar" : "JA",
+        "begrunnelse" : "Bruker har oppgitt NEI i Opphold utenfor EØS",
+        "harDekning" : null,
+        "dekning" : "",
+        "utledetInformasjon" : [ ],
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Har Bruker svart Nei i opphold utenfor EØS"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Har Bruker svart Nei i opphold utenfor EØS"
+    }, {
+      "regelId" : "REGEL_UTSJEKK",
+      "svar" : "JA",
+      "begrunnelse" : "",
+      "harDekning" : null,
+      "dekning" : "",
+      "utledetInformasjon" : [ ],
+      "delresultat" : [ {
+        "regelId" : "SP6500",
+        "svar" : "JA",
+        "begrunnelse" : "alle regelbrudd kan sjekkes ut automatisk",
+        "harDekning" : null,
+        "dekning" : "",
+        "utledetInformasjon" : [ ],
+        "delresultat" : [ ],
+        "årsaker" : [ ],
+        "avklaring" : "Kan alle regelbrudd sjekkes ut"
+      } ],
+      "årsaker" : [ ],
+      "avklaring" : "Kan alle regelbrudd fra gammel regelmotor sjekkes ut?"
+    } ],
+    "avklaringsListe" : [ ]
+  } ]
+}

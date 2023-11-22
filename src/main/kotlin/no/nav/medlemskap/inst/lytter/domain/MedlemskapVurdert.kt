@@ -11,16 +11,22 @@ data class MedlemskapVurdert(
     val erNorskStatsborger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_11")?.svar == "JA",
     val erEOSBorger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_2")?.svar == "JA",
     val erTredjelandsBorger: Boolean = !erEOSBorger,
+    val konklusjon: List<Konklusjon> = emptyList()
 
 ) {
     fun finnRegelResultat(regel: String): Resultat? {
         return resultat.finnRegelResultat(resultat, regel)
     }
+
+    fun finnsvar():String{
+        runCatching { konklusjon.first().status.name }
+            .onFailure { return resultat.svar }
+            .onSuccess { return it }
+        return ""
+    }
 }
 
-data class Brukerinput(
-    val arbeidUtenforNorge:Boolean
-)
+
 
 data class Datagrunnlag(
     val fnr: String,

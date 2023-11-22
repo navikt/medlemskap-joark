@@ -32,7 +32,7 @@ class PdfService():IkanOpprettePdf {
     }
 
     fun mapRecordToRequestObject(medlemskapVurdering: MedlemskapVurdert): Response {
-        return if (medlemskapVurdering.resultat.svar == "JA") {
+         return if (medlemskapVurdering.resultat.svar == "JA") {
             JaResponse(
                 medlemskapVurdering.tidspunkt,
                 medlemskapVurdering.datagrunnlag.fnr,
@@ -45,6 +45,18 @@ class PdfService():IkanOpprettePdf {
             )
 
         } else {
+            if (medlemskapVurdering.konklusjon.isNotEmpty() && medlemskapVurdering.konklusjon.first().status == Svar.JA){
+                return JaResponse(
+                    medlemskapVurdering.tidspunkt,
+                    medlemskapVurdering.datagrunnlag.fnr,
+                    medlemskapVurdering.datagrunnlag.periode.fom.toString(),
+                    medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                    slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
+                    medlemskapVurdering.erNorskStatsborger,
+                    medlemskapVurdering.erTredjelandsBorger,
+                    MedlemskapVurdering.valueOf(medlemskapVurdering.konklusjon.first().status.name)
+                )
+            }
             val uavklartResponse =UavklartResponse(
                 tidspunkt = medlemskapVurdering.tidspunkt,
                 fnr = medlemskapVurdering.datagrunnlag.fnr,
@@ -60,7 +72,6 @@ class PdfService():IkanOpprettePdf {
             )
             return uavklartResponse
         }
-
     }
 
     fun slåSammenNavn(pdlNavn: Navn): String {
