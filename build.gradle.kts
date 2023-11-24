@@ -6,6 +6,7 @@ val resilience4jVersion = "1.5.0"
 val logstashVersion = "6.4"
 val logbackVersion = "1.2.3"
 val httpClientVersion = "4.5.13"
+val threetenVersion = "1.5.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
@@ -37,6 +38,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("org.threeten:threeten-extra:$threetenVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion") {
         exclude(group = "io.netty", module = "netty-codec")
         exclude(group = "io.netty", module = "netty-codec-http")
