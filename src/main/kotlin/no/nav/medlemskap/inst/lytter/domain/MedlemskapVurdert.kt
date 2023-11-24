@@ -47,9 +47,6 @@ val historisk:Boolean
 
 
 data class Navn(val fornavn: String, val mellomnavn: String?, val etternavn: String)
-
-data class Periode(val fom: LocalDate, val tom: LocalDate)
-
 data class Årsak (
     val svar: String,
     val avklaring: String,
