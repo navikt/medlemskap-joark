@@ -1,10 +1,14 @@
 package no.nav.medlemskap.inst.lytter.service
+import io.ktor.client.request.forms.*
+import kotlinx.coroutines.flow.merge
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.journalpost.getDokTittel
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.format.DateTimeFormatter
 
 class JoarkServiceTest {
 
@@ -98,5 +102,19 @@ class JoarkServiceTest {
         val fileContent = this::class.java.classLoader.getResource("UavklartResultatMedJaKonklusjon.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
         Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
+    @Test
+    fun `Tittel skal vaere basert paa konklusjon om det finnes`() {
+        val fileContent = this::class.java.classLoader.getResource("UavklartResultatMedJaKonklusjon.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+        val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        Assertions.assertEquals("Automatisk vurdering: Er medlem i folketrygden pr. 11.11.2023",medlemskapVurdering.getDokTittel(dateFormat))
+    }
+    @Test
+    fun `Tittel skal vaere basert paa resultat om konklusjon ikke finnes`() {
+        val fileContent = this::class.java.classLoader.getResource("regel_19_1_sample.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+        val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        Assertions.assertEquals("Automatisk vurdering - Medlemskapet er uavklart",medlemskapVurdering.getDokTittel(dateFormat))
     }
 }
