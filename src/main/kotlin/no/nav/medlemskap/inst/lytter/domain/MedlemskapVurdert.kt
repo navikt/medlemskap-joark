@@ -11,18 +11,22 @@ data class MedlemskapVurdert(
     val erNorskStatsborger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_11")?.svar == "JA",
     val erEOSBorger: Boolean = resultat.finnRegelResultat(resultat, "REGEL_2")?.svar == "JA",
     val erTredjelandsBorger: Boolean = !erEOSBorger,
+    val konklusjon: List<Konklusjon> = emptyList()
 
-    ) {
+) {
     fun finnRegelResultat(regel: String): Resultat? {
         return resultat.finnRegelResultat(resultat, regel)
     }
 
-
+    fun finnsvar():String{
+        runCatching { konklusjon.first().status.name }
+            .onFailure { return resultat.svar }
+            .onSuccess { return it }
+        return ""
+    }
 }
 
-data class Brukerinput(
-    val arbeidUtenforNorge: Boolean
-)
+
 
 data class Datagrunnlag(
     val fnr: String,
@@ -31,65 +35,24 @@ data class Datagrunnlag(
     val startDatoForYtelse: String?,
     val periode: Periode,
     val pdlpersonhistorikk: Personhistorikk,
-    val medlemskap: List<Medlemskap>,
-    val brukerinput: Brukerinput
+    val brukerinput:Brukerinput
 )
 
-data class Medlemskap(
-    val dekning: String?,
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
-    val erMedlem: Boolean,
-    val lovvalg: Lovvalg?,
-    val lovvalgsland: String?,
-    val periodeStatus: PeriodeStatus?
-){
-    private val periode = Periode(fraOgMed, tilOgMed)
-
-    fun overlapper(annenPeriode: Periode): Boolean {
-        return periode.overlapper(annenPeriode)
-    }
-
-    companion object {
-        fun List<Medlemskap>.brukerensMEDLInnslagIPeriode(periode: Periode):List<Medlemskap> =
-            this.filter {
-                it.overlapper(periode) &&
-                        (it.lovvalg == null || it.lovvalg == Lovvalg.ENDL) &&
-                        (it.periodeStatus == null || it.periodeStatus == PeriodeStatus.GYLD)
-            }
-
-
-        fun List<Medlemskap>.brukerensFørsteMEDLUnntakIPeriode(periode: Periode):Medlemskap =
-            this.brukerensMEDLInnslagIPeriode(periode).first { !it.erMedlem }
-    }
-
-
-}
-
-enum class Lovvalg() {
-    ENDL, FORL, UAVK
-}
-
-enum class PeriodeStatus() {
-    GYLD, AVST, UAVK
-}
-
-data class Personhistorikk(val navn: List<Navn>, val statsborgerskap: List<Statsborgerskap>)
+data class Personhistorikk(val navn: List<Navn>,val statsborgerskap:List<Statsborgerskap>)
 
 data class Statsborgerskap(
-    val landkode: String,
-    val historisk: Boolean
+val landkode:String,
+val historisk:Boolean
 )
 
 
 data class Navn(val fornavn: String, val mellomnavn: String?, val etternavn: String)
-
-data class Årsak(
+data class Årsak (
     val svar: String,
     val avklaring: String,
     val regelId: String,
     val begrunnelse: String,
-    var beskrivelse: String?
+    var beskrivelse:String?
 )
 
 
@@ -99,7 +62,7 @@ data class Resultat(
     val avklaring: String,
     val regelId: String,
     val delresultat: List<Resultat>,
-    val årsaker: List<Årsak>
+    val årsaker:List<Årsak>
 ) {
 
     fun finnRegelResultat(resultat: Resultat, regelId: String): Resultat? {

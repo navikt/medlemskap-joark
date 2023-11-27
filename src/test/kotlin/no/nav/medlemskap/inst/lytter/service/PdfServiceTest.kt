@@ -15,6 +15,13 @@ class PdfServiceTest {
         println(request.toJsonPrettyString())
     }
     @Test
+    fun testKorrektMappingNyModell(){
+        val fileContent = this::class.java.classLoader.getResource("JaVurderingMedKonklusjon.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+        val request =  PdfService().mapRecordToRequestObject(medlemskapVurdering)
+        println(request.toJsonPrettyString())
+    }
+    @Test
     fun testKorrektMappingDagPengerUavklart(){
         val fileContent = this::class.java.classLoader.getResource("regel_19_1_sample.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
