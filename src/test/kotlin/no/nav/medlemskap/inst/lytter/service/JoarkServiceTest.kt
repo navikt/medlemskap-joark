@@ -89,6 +89,14 @@ class JoarkServiceTest {
         Assertions.assertFalse(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
 
+    @Test
+    fun `NEI skal som går gjennom kafka endepunkt skal opprette dokument`() {
+        val fileContent = this::class.java.classLoader.getResource("NeiSvarUtenBrukerSporsmaal.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+
+        Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
+
 
     @Test
     fun `arbeid utland skal ikke generere PDF dokumenter`() {
