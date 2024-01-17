@@ -8,3 +8,7 @@ data class MedlemskapVurdertRecord(val partition:Int,val offset:Long,val value :
  fun MedlemskapVurdertRecord.getYtelse():String{
     return JaksonParser().parseToObject(this.json).datagrunnlag.ytelse
 }
+
+fun MedlemskapVurdertRecord.getSvar():String {
+    return JaksonParser().parseToObject(this.json).resultat.svar
+}

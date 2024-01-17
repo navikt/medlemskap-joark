@@ -116,12 +116,14 @@ class JoarkService(
         log.info(
             "PDF opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
+            kv("svar", this.getSvar())
         )
 
     private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
         log.info(
             "Dokument opprettet for ytelse : ${this.getYtelse()} i Joark ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
+            kv("svar", this.getSvar())
         )
 
     private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =
