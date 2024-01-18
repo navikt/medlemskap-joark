@@ -42,7 +42,7 @@ class JoarkService(
         if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = pdfService.opprettPfd(record.key, medlemskapVurdering)
-            record.logOpprettetPdf()
+            record.logOpprettetPdf(medlemskapVurdering)
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
                 kv("callId", record.key),
@@ -50,7 +50,7 @@ class JoarkService(
             )
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response != null) {
-                record.logDokumentLagretIJoark()
+                record.logDokumentLagretIJoark(medlemskapVurdering)
                 //publiser til topic ZZZ
             } else {
                 record.logDokumentIkkeLagretIJoark()
@@ -70,7 +70,7 @@ class JoarkService(
         if (handler.skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf =pdfService.opprettPfd(record.key, medlemskapVurdering)
-            record.logOpprettetPdf()
+            record.logOpprettetPdf(medlemskapVurdering)
             secureLogger.info(
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
                 kv("callId", record.key),
@@ -78,7 +78,7 @@ class JoarkService(
             )
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
             if (response != null) {
-                record.logDokumentLagretIJoark()
+                record.logDokumentLagretIJoark(medlemskapVurdering)
                 //publiser til topic ZZZ
             } else {
                 record.logDokumentIkkeLagretIJoark()
@@ -112,16 +112,18 @@ class JoarkService(
             kv("callId", key),
         )
 
-    private fun MedlemskapVurdertRecord.logOpprettetPdf() =
+    private fun MedlemskapVurdertRecord.logOpprettetPdf(medlemskapVurdering: MedlemskapVurdert) =
         log.info(
             "PDF opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
+            kv("svar", medlemskapVurdering.finnsvar())
         )
 
-    private fun MedlemskapVurdertRecord.logDokumentLagretIJoark() =
+    private fun MedlemskapVurdertRecord.logDokumentLagretIJoark(medlemskapVurdert: MedlemskapVurdert) =
         log.info(
             "Dokument opprettet for ytelse : ${this.getYtelse()} i Joark ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
+            kv("svar", medlemskapVurdert.finnsvar())
         )
 
     private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =

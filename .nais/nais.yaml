@@ -29,12 +29,6 @@ spec:
   prometheus:
     enabled: true
     path: "/metrics"
-  limits:
-    cpu: "200m"
-    memory: "256Mi"
-  requests:
-    cpu: "200m"
-    memory: "256Mi"
   secureLogs:
     enabled: true
   kafka:
@@ -49,6 +43,13 @@ spec:
         - host: saf.dev-fss-pub.nais.io
         - host: login.microsoftonline.com
         - host: dokarkiv.dev-fss-pub.nais.io
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
   env:
     - name: PDF_GEN_BASE_URL
       value: http://medlemskap-oppslag-pdfgen.medlemskap.svc.cluster.local
