@@ -20,6 +20,13 @@ spec:
     port: 8080
     initialDelay: 20
     timeout: 60
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
   replicas:
     min: 2
     max: 2
@@ -27,12 +34,6 @@ spec:
   prometheus:
     enabled: true
     path: "/metrics"
-  limits:
-    cpu: "200m"
-    memory: "256Mi"
-  requests:
-    cpu: "200m"
-    memory: "256Mi"
   secureLogs:
     enabled: true
   kafka:
