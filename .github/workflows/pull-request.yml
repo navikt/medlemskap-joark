@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      checks: write
     steps:
       - name: Checkout
         uses: actions/checkout@master
