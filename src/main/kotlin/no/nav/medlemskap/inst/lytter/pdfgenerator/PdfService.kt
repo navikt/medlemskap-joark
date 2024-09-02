@@ -5,6 +5,7 @@ import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.*
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
+import no.nav.medlemskap.inst.lytter.service.TilNorskDatoformat
 
 class PdfService():IkanOpprettePdf {
     val configuration = Configuration()
@@ -36,8 +37,8 @@ class PdfService():IkanOpprettePdf {
             JaResponse(
                 medlemskapVurdering.tidspunkt,
                 medlemskapVurdering.datagrunnlag.fnr,
-                medlemskapVurdering.datagrunnlag.periode.fom.toString(),
-                medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                medlemskapVurdering.datagrunnlag.periode.fom.TilNorskDatoformat(),
+                medlemskapVurdering.datagrunnlag.periode.tom.TilNorskDatoformat(),
                 slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                 medlemskapVurdering.erNorskStatsborger,
                 medlemskapVurdering.erTredjelandsBorger,
@@ -49,8 +50,8 @@ class PdfService():IkanOpprettePdf {
                 return JaResponse(
                     medlemskapVurdering.tidspunkt,
                     medlemskapVurdering.datagrunnlag.fnr,
-                    medlemskapVurdering.datagrunnlag.periode.fom.toString(),
-                    medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                    medlemskapVurdering.datagrunnlag.periode.fom.TilNorskDatoformat(),
+                    medlemskapVurdering.datagrunnlag.periode.tom.TilNorskDatoformat(),
                     slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                     medlemskapVurdering.erNorskStatsborger,
                     medlemskapVurdering.erTredjelandsBorger,
@@ -60,8 +61,8 @@ class PdfService():IkanOpprettePdf {
             val uavklartResponse =UavklartResponse(
                 tidspunkt = medlemskapVurdering.tidspunkt,
                 fnr = medlemskapVurdering.datagrunnlag.fnr,
-                fom = medlemskapVurdering.datagrunnlag.periode.fom.toString(),
-                tom = medlemskapVurdering.datagrunnlag.periode.tom.toString(),
+                fom = medlemskapVurdering.datagrunnlag.periode.fom.TilNorskDatoformat(),
+                tom = medlemskapVurdering.datagrunnlag.periode.tom.TilNorskDatoformat(),
                 navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
                 erNorskStatsborger = medlemskapVurdering.erNorskStatsborger,
                 erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger,
