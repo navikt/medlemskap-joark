@@ -34,9 +34,49 @@ data class Datagrunnlag(
     val førsteDagForYtelse: String?,
     val startDatoForYtelse: String?,
     val periode: Periode,
+    val medlemskap: List<MedlInnslag>,
     val pdlpersonhistorikk: Personhistorikk,
     val brukerinput:Brukerinput
 )
+data class MedlInnslag(
+    val dekning: String?,
+    val fraOgMed: LocalDate,
+    val tilOgMed: LocalDate,
+    val erMedlem: Boolean,
+    val lovvalg: MedlLovvalg?,
+    val lovvalgsland: String?,
+    val periodeStatus: PeriodeStatus?
+){
+    private val periode = Periode(fraOgMed, tilOgMed)
+
+    fun overlapper(annenPeriode: Periode): Boolean {
+        return periode.overlapper(annenPeriode)
+    }
+
+    companion object {
+        fun List<MedlInnslag>.brukerensMEDLInnslagIPeriode(periode: Periode):List<MedlInnslag> =
+            this.filter {
+                it.overlapper(periode) &&
+                        (it.lovvalg == null || it.lovvalg == MedlLovvalg.ENDL) &&
+                        (it.periodeStatus == null || it.periodeStatus == PeriodeStatus.GYLD)
+            }
+
+
+        fun List<MedlInnslag>.brukerensFørsteMEDLUnntakIPeriode(periode: Periode):MedlInnslag =
+            this.brukerensMEDLInnslagIPeriode(periode).first { !it.erMedlem }
+    }
+
+
+}
+
+
+enum class MedlLovvalg() {
+    ENDL, FORL, UAVK
+}
+
+enum class PeriodeStatus() {
+    GYLD, AVST, UAVK
+}
 
 data class Personhistorikk(val navn: List<Navn>,val statsborgerskap:List<Statsborgerskap>)
 
