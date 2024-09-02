@@ -8,6 +8,7 @@ import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.journalpost.getDokTittel
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class JoarkServiceTest {

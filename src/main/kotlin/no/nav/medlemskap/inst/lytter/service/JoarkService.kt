@@ -12,6 +12,8 @@ import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostServiceDagpenger
 import java.lang.Exception
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class JoarkService(
@@ -131,4 +133,9 @@ class JoarkService(
             "Dokument Ikke opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
             kv("callId", key),
         )
+}
+
+fun LocalDate.TilNorskDatoformat(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return this.format(formatter)
 }
