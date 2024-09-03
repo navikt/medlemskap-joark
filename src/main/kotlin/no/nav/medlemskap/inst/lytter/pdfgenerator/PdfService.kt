@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.*
+import no.nav.medlemskap.inst.lytter.domain.MedlInnslag.Companion.brukerensFørsteMEDLUnntakIPeriode
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.service.TilNorskDatoformat
 
@@ -58,19 +59,37 @@ class PdfService():IkanOpprettePdf {
                     MedlemskapVurdering.valueOf(medlemskapVurdering.konklusjon.first().status.name)
                 )
             }
-            val uavklartResponse =UavklartResponse(
-                tidspunkt = medlemskapVurdering.tidspunkt,
-                fnr = medlemskapVurdering.datagrunnlag.fnr,
-                fom = medlemskapVurdering.datagrunnlag.periode.fom.TilNorskDatoformat(),
-                tom = medlemskapVurdering.datagrunnlag.periode.tom.TilNorskDatoformat(),
-                navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
-                erNorskStatsborger = medlemskapVurdering.erNorskStatsborger,
-                erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger,
-                medlemskapVurdering =  MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar),
-                ytelse = medlemskapVurdering.datagrunnlag.ytelse,
-                årsaker = medlemskapVurdering.resultat.årsaker,
-                statsborger = hentStatsborgerskap(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.statsborgerskap)
-            )
+             if (medlemskapVurdering.resultat.svar == "NEI"){
+                 val periode = medlemskapVurdering.datagrunnlag.periode
+                 val medlInnslag = medlemskapVurdering.datagrunnlag.medlemskap.brukerensFørsteMEDLUnntakIPeriode(periode)
+                 return NeiResponse(
+                     tidspunkt = medlemskapVurdering.tidspunkt,
+                     opprettet = medlemskapVurdering.datagrunnlag.fnr,
+                     ytelse = medlemskapVurdering.datagrunnlag.ytelse,
+                     navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
+                     fnr = medlemskapVurdering.datagrunnlag.fnr,
+                     fom = periode.fom.TilNorskDatoformat(),
+                     tom = periode.tom.TilNorskDatoformat(),
+                     medlfom = medlInnslag.fraOgMed.TilNorskDatoformat(),
+                     medltom = medlInnslag.tilOgMed.TilNorskDatoformat(),
+                     lovvalgsland = medlInnslag.lovvalgsland.toString(),
+                     erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger
+                 )
+
+             }
+             val uavklartResponse = UavklartResponse(
+                 tidspunkt = medlemskapVurdering.tidspunkt,
+                 fnr = medlemskapVurdering.datagrunnlag.fnr,
+                 fom = medlemskapVurdering.datagrunnlag.periode.fom.TilNorskDatoformat(),
+                 tom = medlemskapVurdering.datagrunnlag.periode.tom.TilNorskDatoformat(),
+                 navn = slåSammenNavn(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.navn.first()),
+                 erNorskStatsborger = medlemskapVurdering.erNorskStatsborger,
+                 erTredjelandsborger = medlemskapVurdering.erTredjelandsBorger,
+                 medlemskapVurdering = MedlemskapVurdering.valueOf(medlemskapVurdering.resultat.svar),
+                 ytelse = medlemskapVurdering.datagrunnlag.ytelse,
+                 årsaker = medlemskapVurdering.resultat.årsaker,
+                 statsborger = hentStatsborgerskap(medlemskapVurdering.datagrunnlag.pdlpersonhistorikk.statsborgerskap)
+             )
             return uavklartResponse
         }
     }
@@ -111,6 +130,28 @@ class PdfService():IkanOpprettePdf {
             return JaksonParser().ToJson(this).toPrettyString()
         }
 
+    }
+
+    data class NeiResponse(
+        val tidspunkt: String,
+        val opprettet: String,
+        val ytelse: String,
+        val navn: String,
+        val fnr: String,
+        val fom: String,
+        val tom: String,
+        val medlfom: String,
+        val medltom: String,
+        val lovvalgsland: String,
+        val erTredjelandsborger: Boolean
+    ) : Response {
+        override fun getstatus(): MedlemskapVurdering {
+            return MedlemskapVurdering.NEI
+        }
+
+        override fun toJsonPrettyString(): String {
+            return JaksonParser().ToJson(this).toPrettyString()
+        }
     }
 
     data class UavklartResponse(

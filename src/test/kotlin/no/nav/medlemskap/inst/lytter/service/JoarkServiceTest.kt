@@ -1,5 +1,6 @@
 package no.nav.medlemskap.inst.lytter.service
 import io.ktor.client.request.forms.*
+import io.ktor.util.reflect.*
 import kotlinx.coroutines.flow.merge
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
@@ -94,7 +95,15 @@ class JoarkServiceTest {
     fun `NEI skal som går gjennom kafka endepunkt skal opprette dokument`() {
         val fileContent = this::class.java.classLoader.getResource("NeiSvarUtenBrukerSporsmaal.json").readText(Charsets.UTF_8)
         val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
-
+        Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
+    }
+    @Test
+    fun `NEI svar skal mappes til Nei Request`() {
+        val fileContent = this::class.java.classLoader.getResource("NeiSvarUtenBrukerSporsmaal.json").readText(Charsets.UTF_8)
+        val medlemskapVurdering = JaksonParser().parseToObject(fileContent)
+        val pdfRequest = PdfService().mapRecordToRequestObject(medlemskapVurdering)
+        Assertions.assertTrue(pdfRequest.instanceOf(PdfService.NeiResponse::class))
+        println(pdfRequest.toJsonPrettyString())
         Assertions.assertTrue(JoarkService(Configuration()).skalOpprettePDF(medlemskapVurdering))
     }
 
