@@ -37,7 +37,7 @@ class JoarkServiceTest {
 
     @Test
     fun `mapping til JaResponse objekt for status Ja med nye brukerspørsmål`(){
-        val fileContent = this::class.java.classLoader.getResource("JaVurdering_nyeBrukerSpørsmål.json").readText(Charsets.UTF_8)
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_nyeBrukerSporsmaal.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
         val jaRequest = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
         Assertions.assertTrue(jaRequest is PdfService.JaResponse)
