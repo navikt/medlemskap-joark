@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 class JoarkServiceTest {
 
     @Test
-    fun `mapping til JaResponse objekt for status Ja`(){
+    fun `mapping til JaResponse objekt for status Ja uten nye brukerspørsmål`(){
         val fileContent = this::class.java.classLoader.getResource("JaVurdering_3landsBorger.json").readText(Charsets.UTF_8)
         val pdfService = PdfService()
         val jaRequest = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
@@ -26,6 +26,33 @@ class JoarkServiceTest {
             Assertions.assertFalse(jaRequest.erNorskStatsborger)
             Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
             Assertions.assertEquals("Test Person", jaRequest.navn)
+            Assertions.assertTrue(jaRequest.brukerSpørsmålArbeidUtlandGammel)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålArbeidUtlandNy)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålOppholdUtenforNorge)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålOppholdUtenforEØS)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålOppholdstillatelse)
+
+        }
+    }
+
+    @Test
+    fun `mapping til JaResponse objekt for status Ja med nye brukerspørsmål`(){
+        val fileContent = this::class.java.classLoader.getResource("JaVurdering_nyeBrukerSpørsmål.json").readText(Charsets.UTF_8)
+        val pdfService = PdfService()
+        val jaRequest = pdfService.mapRecordToRequestObject(JaksonParser().parseToObject(fileContent))
+        Assertions.assertTrue(jaRequest is PdfService.JaResponse)
+        if (jaRequest is PdfService.JaResponse){
+            Assertions.assertTrue(jaRequest.fnr==("12345678901"))
+            Assertions.assertFalse(jaRequest.erTredjelandsborger)
+            Assertions.assertTrue(jaRequest.erNorskStatsborger)
+            Assertions.assertTrue(jaRequest.medlemskapVurdering==MedlemskapVurdering.JA)
+            Assertions.assertEquals("Kari Nor Normann", jaRequest.navn)
+            Assertions.assertTrue(jaRequest.brukerSpørsmålArbeidUtlandGammel)
+            Assertions.assertTrue(jaRequest.brukerSpørsmålArbeidUtlandNy)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålOppholdUtenforNorge)
+            Assertions.assertTrue(jaRequest.brukerSpørsmålOppholdUtenforEØS)
+            Assertions.assertFalse(jaRequest.brukerSpørsmålOppholdstillatelse)
+
         }
     }
 
