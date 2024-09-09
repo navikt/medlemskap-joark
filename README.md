@@ -9,7 +9,7 @@ NAIS applikasjon som
 Tjenesten testes kun med Junit tester 
 * JaksonMapperTest tester parsing av melding fra kafka topic. Kilde er både fil (eksemepl melding) 
 samt at en test også leser forventet respons fra medlemslap-oppslag tester (kontrakts testing)
-* JoarkService test tester mappingen til request obketet for Joark
+* JoarkService test tester mappingen til request obketet for Joark.
 
 # kjøring lokalt
 komponenten kan startes lokalt så fremst man har de korrekte key store og trust store satt opp lokalt.
