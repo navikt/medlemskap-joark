@@ -10,7 +10,6 @@ open class KafkaConfig(
     private val securityStrategy: SecurityStrategy = PlainStrategy(environment = environment)
 ) {
 
-    //private val schemaRegistry = environment.requireEnv(EnvironmentKey.SCHEMA_REGISTRY)
     val topic = Configuration.KafkaConfig().topic
 
 
@@ -21,7 +20,7 @@ open class KafkaConfig(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
         ConsumerConfig.GROUP_ID_CONFIG to Configuration.KafkaConfig().groupID,
         ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
-        ConsumerConfig.MAX_POLL_RECORDS_CONFIG to 30
+        ConsumerConfig.MAX_POLL_RECORDS_CONFIG to 1
     ) + securityStrategy.securityConfig()
 
     fun createConsumer() = KafkaConsumer<String, String>(inst2Config())

@@ -11,6 +11,7 @@ import no.nav.medlemskap.inst.lytter.config.KafkaConfig
 import no.nav.medlemskap.inst.lytter.config.Environment
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.service.JoarkService
+import org.apache.kafka.clients.consumer.CommitFailedException
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 
@@ -43,15 +44,6 @@ class Consumer(
                     it.value()
                 )
             }
-            .also {
-                //Metrics.incReceivedTotal(it.count())
-                //it.forEach { hendelse ->
-                //    Metrics.incReceivedKilde(hendelse.kilde)
-                //}
-            }
-
-
-    //.filter { it.kilde == Hendelse.Kilde.KDI }
 
     fun flow(): Flow<List<MedlemskapVurdertRecord>> =
         flow {
@@ -69,11 +61,13 @@ class Consumer(
                         StructuredArguments.kv("callId", record.key),
                     )
                 }
-
-
             }
         }.onEach {
-            consumer.commitAsync()
+            try {
+                consumer.commitSync()
+            } catch (e: CommitFailedException) {
+                log.error { "Commit feilet med feilmeldingen: ${e.message}" }
+            }
         }.onEach {
             Metrics.incProcessedTotal(it.count())
         }

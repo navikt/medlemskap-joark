@@ -28,6 +28,13 @@ class JoarkService(
     }
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
+        secureLogger.info("Kafka: Leser melding fra medlemskap vurdert i joark-lytter",
+            kv("callId", record.key),
+            kv("topic", record.topic),
+            kv("partition", record.partition),
+            kv("offset", record.offset)
+        )
+
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
         when (medlemskapVurdering.datagrunnlag.ytelse){
          "SYKEPENGER" ->handleSykepengeRecord(medlemskapVurdering, record)
