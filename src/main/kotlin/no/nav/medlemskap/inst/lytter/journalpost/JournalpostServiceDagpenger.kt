@@ -8,8 +8,6 @@ import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class JournalpostServiceDagpenger() :IKanJournalforePDF {
@@ -17,16 +15,11 @@ class JournalpostServiceDagpenger() :IKanJournalforePDF {
     val behandlingstema = null
     val kanal = null
     val configuration = Configuration()
-    val restClients = RestClientsImpl(
-        configuration = configuration
-    )
+    val restClients = RestClientsImpl(configuration = configuration)
     val journalfoerendeEnhet="9999"
-    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-    companion object {
-        private val log = KotlinLogging.logger { }
-
-    }
     val joarkClient = restClients.joarkClient(configuration.register.joarkBaseUrl)
+
+    private val log = KotlinLogging.logger { }
 
     override suspend fun lagrePdfTilJoark(callId:String, journalpostRequest: JournalpostRequest):JsonNode?{
         try{

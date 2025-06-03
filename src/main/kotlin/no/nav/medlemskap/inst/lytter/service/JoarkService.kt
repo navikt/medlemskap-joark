@@ -1,34 +1,30 @@
 package no.nav.medlemskap.inst.lytter.service
 
 import mu.KotlinLogging
-
-import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.domain.*
+import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
+import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
+import no.nav.medlemskap.inst.lytter.journalpost.JournalpostServiceDagpenger
 import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
-import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
-import no.nav.medlemskap.inst.lytter.journalpost.JournalpostServiceDagpenger
-import java.lang.Exception
+import org.slf4j.MarkerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class JoarkService(
-    private val configuration: Configuration,
-) {
+class JoarkService(private val configuration: Configuration) {
     var journalpostService:IKanJournalforePDF = JournalpostService()
     var pdfService:IkanOpprettePdf = PdfService()
-    companion object {
-        val log = KotlinLogging.logger { }
-        private val secureLogger = KotlinLogging.logger("tjenestekall")
-
-    }
+    private val log = KotlinLogging.logger { }
+    private val teamLogs = MarkerFactory.getMarker("TEAM_LOGS")
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
-        secureLogger.info("Kafka: Leser melding fra medlemskap vurdert i joark-lytter",
+        log.info(
+            teamLogs,
+            "Kafka: Leser melding fra medlemskap vurdert i joark-lytter",
             kv("callId", record.key),
             kv("topic", record.topic),
             kv("partition", record.partition),
@@ -52,7 +48,8 @@ class JoarkService(
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = pdfService.opprettPfd(record.key, medlemskapVurdering)
             record.logOpprettetPdf(medlemskapVurdering)
-            secureLogger.info(
+            log.info(
+                teamLogs,
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
                 kv("callId", record.key),
                 kv("fnr", medlemskapVurdering.datagrunnlag.fnr)
@@ -80,7 +77,8 @@ class JoarkService(
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf =pdfService.opprettPfd(record.key, medlemskapVurdering)
             record.logOpprettetPdf(medlemskapVurdering)
-            secureLogger.info(
+            log.info(
+                teamLogs,
                 "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
                 kv("callId", record.key),
                 kv("fnr", medlemskapVurdering.datagrunnlag.fnr)

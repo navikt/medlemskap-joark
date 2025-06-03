@@ -10,8 +10,6 @@ spec:
     logging:
       destinations:
         - id: loki
-        - id: elastic
-        - id: secure_logs
   azure:
     application:
       enabled: true
@@ -40,14 +38,14 @@ spec:
   prometheus:
     enabled: true
     path: "/metrics"
-  secureLogs:
-    enabled: true
   kafka:
     pool: nav-prod
   accessPolicy:
     outbound:
       rules:
         - application: medlemskap-oppslag-pdfgen
+        - application: logging
+          namespace: nais-system
       external:
         - host: api-gw.oera.no
         - host: saf.prod-fss-pub.nais.io

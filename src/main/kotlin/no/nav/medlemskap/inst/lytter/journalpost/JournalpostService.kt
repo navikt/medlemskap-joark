@@ -10,11 +10,9 @@ import no.nav.medlemskap.inst.lytter.domain.MedlemskapVurdertRecord
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class JournalpostService() :IKanJournalforePDF {
-    val dokumentnavnJA  = "Automatisk vurdering: Er medlem i folketrygden pr. "
     val tema = "MED"
     val behandlingstema = null
     val kanal = null
@@ -24,10 +22,8 @@ class JournalpostService() :IKanJournalforePDF {
     )
     val journalfoerendeEnhet="9999"
     val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    companion object {
-        private val log = KotlinLogging.logger { }
+    private val log = KotlinLogging.logger { }
 
-    }
     val joarkClient = restClients.joarkClient(configuration.register.joarkBaseUrl)
 
     override suspend fun lagrePdfTilJoark(callId:String, journalpostRequest: JournalpostRequest):JsonNode?{
