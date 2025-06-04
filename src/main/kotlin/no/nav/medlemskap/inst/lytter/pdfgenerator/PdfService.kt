@@ -7,16 +7,14 @@ import no.nav.medlemskap.inst.lytter.domain.*
 import no.nav.medlemskap.inst.lytter.domain.MedlInnslag.Companion.brukerensFørsteMEDLUnntakIPeriode
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.service.TilNorskDatoformat
+import org.slf4j.MarkerFactory
 
 class PdfService() : IkanOpprettePdf {
     val configuration = Configuration()
-    val restClients = RestClientsImpl(
-        configuration = configuration
-    )
+    val restClients = RestClientsImpl(configuration = configuration)
 
-    companion object {
-        private val secureLogger = KotlinLogging.logger("tjenestekall")
-    }
+    private val logger = KotlinLogging.logger { }
+    private val teamLogs = MarkerFactory.getMarker("TEAM_LOGS")
 
     private val pdfClient = restClients.pdfGen(configuration.register.pdfGenBaseUrl)
 
@@ -25,14 +23,14 @@ class PdfService() : IkanOpprettePdf {
         medlemskapVurdering: MedlemskapVurdert
     ): ByteArray {
         val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
-        secureLogger.info { "kaller PdfGenerator med følgende parameter : " + pdfRequest.toJsonPrettyString() }
+        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${pdfRequest.toJsonPrettyString()}")
         val response = pdfClient.kallPDFGenerator(record.key, pdfRequest.getstatus(), pdfRequest)
         return response
     }
 
     override suspend fun opprettPfd(callID: String, medlemskapVurdering: MedlemskapVurdert): ByteArray {
         val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
-        secureLogger.info { "kaller PdfGenerator med følgende parameter : " + pdfRequest.toJsonPrettyString() }
+        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${pdfRequest.toJsonPrettyString()}")
         val response = pdfClient.kallPDFGenerator(callID, pdfRequest.getstatus(), pdfRequest)
         return response
     }

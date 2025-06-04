@@ -1,7 +1,5 @@
 package no.nav.medlemskap.inst.lytter.service
-import io.ktor.client.request.forms.*
 import io.ktor.util.reflect.*
-import kotlinx.coroutines.flow.merge
 import no.nav.medlemskap.inst.lytter.config.Configuration
 import no.nav.medlemskap.inst.lytter.pdfgenerator.MedlemskapVurdering
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
@@ -9,7 +7,6 @@ import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.journalpost.getDokTittel
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class JoarkServiceTest {

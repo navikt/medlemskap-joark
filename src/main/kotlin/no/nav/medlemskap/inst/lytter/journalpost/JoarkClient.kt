@@ -6,9 +6,8 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import no.nav.medlemskap.inst.lytter.http.runWithRetryAndMetrics
-import mu.KotlinLogging
 import no.nav.medlemskap.clients.azuread.AzureAdClient
+import no.nav.medlemskap.inst.lytter.http.runWithRetryAndMetrics
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 
 
@@ -17,10 +16,7 @@ class JoarkClient(
     private val httpClient: HttpClient,
     private val retry: Retry? = null,
     val azureAdClient :AzureAdClient
-)
-{
-    private val log = KotlinLogging.logger { }
-
+) {
      suspend fun journalfoerDok(callId: String,journalpostRequest: JournalpostRequest): JsonNode {
          val token = azureAdClient.hentTokenScopetMotJoark()
          return runWithRetryAndMetrics("MEDL-OPPSLAG-JOARK", "journalfoerDokument", retry) {
