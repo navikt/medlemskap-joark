@@ -22,15 +22,6 @@ class JoarkService(private val configuration: Configuration) {
     private val teamLogs = MarkerFactory.getMarker("TEAM_LOGS")
 
     suspend fun handle(record: MedlemskapVurdertRecord) {
-        log.info(
-            teamLogs,
-            "Kafka: Leser melding fra medlemskap vurdert i joark-lytter",
-            kv("callId", record.key),
-            kv("topic", record.topic),
-            kv("partition", record.partition),
-            kv("offset", record.offset)
-        )
-
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
         when (medlemskapVurdering.datagrunnlag.ytelse){
          "SYKEPENGER" ->handleSykepengeRecord(medlemskapVurdering, record)
@@ -47,48 +38,16 @@ class JoarkService(private val configuration: Configuration) {
         if (skalOpprettePDF(medlemskapVurdering)) {
             //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
             val pdf = pdfService.opprettPfd(record.key, medlemskapVurdering)
-            record.logOpprettetPdf(medlemskapVurdering)
-            log.info(
-                teamLogs,
-                "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
-                kv("callId", record.key),
-                kv("fnr", medlemskapVurdering.datagrunnlag.fnr)
-            )
+
+            record.loggOpprettetPDF(medlemskapVurdering)
+
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
+
             if (response != null) {
                 record.logDokumentLagretIJoark(medlemskapVurdering)
                 //publiser til topic ZZZ
             } else {
-                record.logDokumentIkkeLagretIJoark()
-            }
-
-        } else {
-            record.logFiltrert()
-        }
-    }
-
-    suspend fun handleDagppengeRecord(
-        medlemskapVurdering: MedlemskapVurdert,
-        record: MedlemskapVurdertRecord
-    ) {
-        val journalpostService:IKanJournalforePDF = JournalpostServiceDagpenger()
-        val handler = DagpengeHandler(pdfService,journalpostService)
-        if (handler.skalOpprettePDF(medlemskapVurdering)) {
-            //TODO:Endre api mot pdfService og journalpostService til å ta in MedlemskapVurdert objekt og ikke medlemskapVurdertRecord
-            val pdf =pdfService.opprettPfd(record.key, medlemskapVurdering)
-            record.logOpprettetPdf(medlemskapVurdering)
-            log.info(
-                teamLogs,
-                "PDF opprettet for ${medlemskapVurdering.datagrunnlag.fnr} vedrørende ytelse : ${medlemskapVurdering.datagrunnlag.ytelse}",
-                kv("callId", record.key),
-                kv("fnr", medlemskapVurdering.datagrunnlag.fnr)
-            )
-            val response = journalpostService.lagrePdfTilJoark(record, pdf)
-            if (response != null) {
-                record.logDokumentLagretIJoark(medlemskapVurdering)
-                //publiser til topic ZZZ
-            } else {
-                record.logDokumentIkkeLagretIJoark()
+                record.loggDokumentIkkeLagretIJoark(medlemskapVurdering)
             }
 
         } else {
@@ -119,24 +78,31 @@ class JoarkService(private val configuration: Configuration) {
             kv("callId", key),
         )
 
-    private fun MedlemskapVurdertRecord.logOpprettetPdf(medlemskapVurdering: MedlemskapVurdert) =
+    private fun MedlemskapVurdertRecord.loggOpprettetPDF(medlemskapVurdert: MedlemskapVurdert) =
         log.info(
-            "PDF opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
+            teamLogs,
+            "PDF er generert for ytelse : ${this.getYtelse()}, id: ${key}, offsett: $offset, partition: $partition, topic: $topic",
             kv("callId", key),
-            kv("svar", medlemskapVurdering.finnsvar())
-        )
-
-    private fun MedlemskapVurdertRecord.logDokumentLagretIJoark(medlemskapVurdert: MedlemskapVurdert) =
-        log.info(
-            "Dokument opprettet for ytelse : ${this.getYtelse()} i Joark ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
-            kv("callId", key),
+            kv("fnr", medlemskapVurdert.datagrunnlag.fnr),
             kv("svar", medlemskapVurdert.finnsvar())
         )
 
-    private fun MedlemskapVurdertRecord.logDokumentIkkeLagretIJoark() =
-        log.warn(
-            "Dokument Ikke opprettet for ytelse : ${this.getYtelse()} ID: ${key}, offsett: $offset, partiotion: $partition, topic: $topic",
+
+    private fun MedlemskapVurdertRecord.logDokumentLagretIJoark(medlemskapVurdert: MedlemskapVurdert) =
+        log.info(
+            teamLogs,
+            "Dokument opprettet i Joark for ytelse : ${this.getYtelse()}, id: ${key}, offsett: $offset, partition: $partition, topic: $topic",
             kv("callId", key),
+            kv("fnr", medlemskapVurdert.datagrunnlag.fnr),
+            kv("svar", medlemskapVurdert.finnsvar())
+        )
+
+    private fun MedlemskapVurdertRecord.loggDokumentIkkeLagretIJoark(medlemskapVurdert: MedlemskapVurdert) =
+        log.info(
+            teamLogs,
+            "Dokument ikke opprettet i Joark for ytelse : ${this.getYtelse()}, id: ${key}, offsett: $offset, partition: $partition, topic: $topic",
+            kv("callId", key),
+            kv("fnr", medlemskapVurdert.datagrunnlag.fnr)
         )
 }
 
