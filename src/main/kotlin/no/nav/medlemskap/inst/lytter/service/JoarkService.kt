@@ -48,6 +48,8 @@ class JoarkService(private val configuration: Configuration) {
                 //publiser til topic ZZZ
             } else {
                 record.loggDokumentIkkeLagretIJoark(medlemskapVurdering)
+                throw RuntimeException("Teknisk feil oppstått mot Dokarkiv ved lagring av notat for callId: ${record.key} " +
+                            "offset: ${record.offset}, partition: ${record.partition}, topic: ${record.topic}")
             }
 
         } else {
