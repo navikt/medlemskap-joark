@@ -1,6 +1,8 @@
 package no.nav.medlemskap.inst.lytter.journalpost
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.ktor.client.call.body
 import io.ktor.client.plugins.*
 import mu.KotlinLogging
 import no.nav.medlemskap.inst.lytter.clients.RestClientsImpl
@@ -40,6 +42,13 @@ class JournalpostService() :IKanJournalforePDF {
         catch (cause: ResponseException){
             if (cause.response.status.value == 409) {
                 log.warn("Duplikat journalpost. Dropper melding med navCallID $callId", cause)
+                log.info("Journalpost med Nav-call-id $callId er allerede ferdigstilt. Behandler som OK.")
+                //Må ha body og wrapper for å identifisere 409 i kallende funksjon
+                val body = cause.response.body<JsonNode>()
+                val wrapper = jacksonObjectMapper().createObjectNode()
+                wrapper.set<JsonNode>("body", body)
+                wrapper.put("status", 409)
+                return wrapper
             }
             //TODO: Hva gjør vi med alle andre feil (400 bad request etc)
             log.error("HTTP error i kall mot Dokarkiv: ${cause.response.status.value} ", cause)
