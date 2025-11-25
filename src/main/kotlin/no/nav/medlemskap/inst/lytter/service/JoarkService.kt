@@ -44,7 +44,13 @@ class JoarkService(private val configuration: Configuration) {
             val response = journalpostService.lagrePdfTilJoark(record, pdf)
 
             if (response != null) {
-                record.logDokumentLagretIJoark(medlemskapVurdering)
+                // 409 betyr at journalpost allerede er ferdigstilt i Dokarkiv.
+                // Unngå å kaste feil i dette tilfellet
+                if (response["status"]?.asInt() == 409) {
+                    log.info("Journalpost med Nav-call-id ${record.key} er ferdigstilt. Skal ikke arkiveres på nytt.")
+                } else {
+                    record.logDokumentLagretIJoark(medlemskapVurdering)
+                }
                 //publiser til topic ZZZ
             } else {
                 record.loggDokumentIkkeLagretIJoark(medlemskapVurdering)
