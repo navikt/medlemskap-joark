@@ -54,7 +54,7 @@ spec:
     limits:
       memory: 512Mi
     requests:
-      cpu: 50m
+      cpu: 60m
       memory: 512Mi
   env:
     - name: PDF_GEN_BASE_URL
