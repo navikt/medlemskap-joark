@@ -52,10 +52,10 @@ spec:
         - host: dokarkiv.dev-fss-pub.nais.io
   resources:
     limits:
-      memory: "512Mi"
+      memory: 512Mi
     requests:
-      cpu: "300m"
-      memory: "512Mi"
+      cpu: 60m
+      memory: 512Mi
   env:
     - name: PDF_GEN_BASE_URL
       value: http://medlemskap-oppslag-pdfgen.medlemskap.svc.cluster.local
