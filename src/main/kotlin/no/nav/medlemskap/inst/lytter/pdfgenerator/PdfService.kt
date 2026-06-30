@@ -23,14 +23,14 @@ class PdfService() : IkanOpprettePdf {
         medlemskapVurdering: MedlemskapVurdert
     ): ByteArray {
         val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
-        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${pdfRequest.toJsonPrettyString()}")
+        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${medlemskapVurdering.datagrunnlag.fnr}")
         val response = pdfClient.kallPDFGenerator(record.key, pdfRequest.getstatus(), pdfRequest)
         return response
     }
 
     override suspend fun opprettPfd(callID: String, medlemskapVurdering: MedlemskapVurdert): ByteArray {
         val pdfRequest = mapRecordToRequestObject(medlemskapVurdering)
-        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${pdfRequest.toJsonPrettyString()}")
+        logger.info(teamLogs, "kaller PdfGenerator med følgende parameter : ${medlemskapVurdering.datagrunnlag.fnr}")
         val response = pdfClient.kallPDFGenerator(callID, pdfRequest.getstatus(), pdfRequest)
         return response
     }
