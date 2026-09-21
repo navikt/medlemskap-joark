@@ -7,7 +7,6 @@ import no.nav.medlemskap.inst.lytter.domain.*
 import no.nav.medlemskap.inst.lytter.jakson.JaksonParser
 import no.nav.medlemskap.inst.lytter.journalpost.IKanJournalforePDF
 import no.nav.medlemskap.inst.lytter.journalpost.JournalpostService
-import no.nav.medlemskap.inst.lytter.journalpost.JournalpostServiceDagpenger
 import no.nav.medlemskap.inst.lytter.pdfgenerator.IkanOpprettePdf
 import no.nav.medlemskap.inst.lytter.pdfgenerator.PdfService
 import org.slf4j.MarkerFactory
@@ -25,7 +24,6 @@ class JoarkService(private val configuration: Configuration) {
         val medlemskapVurdering = JaksonParser().parseToObject(record.json)
         when (medlemskapVurdering.datagrunnlag.ytelse){
          "SYKEPENGER" ->handleSykepengeRecord(medlemskapVurdering, record)
-         //"DAGPENGER" -> handleDagppengeRecord(medlemskapVurdering,record)
             else -> log.warn("Ytelsen ${medlemskapVurdering.datagrunnlag.ytelse} er ikke støttet. Ingen dokument opprettet i JOARK")
         }
 
@@ -66,7 +64,6 @@ class JoarkService(private val configuration: Configuration) {
     fun skalOpprettePDF(medlemskapVurdering: MedlemskapVurdert): Boolean {
         when (medlemskapVurdering.datagrunnlag.ytelse){
             "SYKEPENGER" -> return validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
-            "DAGPENGER" -> return medlemskapVurdering.resultat.svar=="UAVKLART"
             else -> return validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
         }
     }
