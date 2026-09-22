@@ -62,7 +62,8 @@ class JoarkService(private val configuration: Configuration) {
     }
 
     fun skalOpprettePDF(medlemskapVurdering: MedlemskapVurdert): Boolean =
-        validateRecord(medlemskapVurdering) &&
+        medlemskapVurdering.datagrunnlag.ytelse == "SYKEPENGER" &&
+            validateRecord(medlemskapVurdering) &&
             medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
 
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
