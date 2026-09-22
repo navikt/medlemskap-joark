@@ -61,12 +61,9 @@ class JoarkService(private val configuration: Configuration) {
         }
     }
 
-    fun skalOpprettePDF(medlemskapVurdering: MedlemskapVurdert): Boolean {
-        when (medlemskapVurdering.datagrunnlag.ytelse){
-            "SYKEPENGER" -> return validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
-            else -> return validateRecord(medlemskapVurdering) && medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
-        }
-    }
+    fun skalOpprettePDF(medlemskapVurdering: MedlemskapVurdert): Boolean =
+        validateRecord(medlemskapVurdering) &&
+            medlemskapVurdering.datagrunnlag.ytelse in ytelserSomKanGenererePDF
 
     private fun validateRecord(medlemskapVurdert: MedlemskapVurdert): Boolean {
         return try {
