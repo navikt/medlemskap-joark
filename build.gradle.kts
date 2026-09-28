@@ -1,18 +1,18 @@
-val ktorVersion = "2.2.1"
+val ktorVersion = "2.3.13"
 val konfigVersion = "1.6.10.0"
-val jacksonVersion = "2.14.1"
-val kotlinLoggerVersion = "1.8.3"
-val resilience4jVersion = "1.5.0"
+val jacksonVersion = "2.22"
+val kotlinLoggerVersion = "1.12.5"
+val resilience4jVersion = "1.7.1"
 val logstashVersion = "8.1"
-val logbackVersion = "1.5.18"
-val httpClientVersion = "4.5.13"
-val threetenVersion = "1.5.0"
+val logbackVersion = "1.6.4"
+val httpClientVersion = "4.5.14"
+val threetenVersion = "1.10.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.25"
     application
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "no.nav.medlemskap"
@@ -58,15 +58,15 @@ dependencies {
     implementation("io.ktor:ktor-client-apache:$ktorVersion")
     implementation("io.ktor:ktor-client-json:$ktorVersion")
     implementation("org.apache.httpcomponents:httpclient:$httpClientVersion")
-    implementation("io.ktor:ktor-server-metrics-micrometer-jvm:2.1.2")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.7.0")
+    implementation("io.ktor:ktor-server-metrics-micrometer-jvm:2.3.13")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.17.1")
     implementation("com.natpryce:konfig:$konfigVersion")
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggerVersion")
     // 2.8.0 er tilgjengelig, burde kanskje oppdatere
-    implementation("org.apache.kafka:kafka-clients:2.5.0")
-    testImplementation(platform("org.junit:junit-bom:5.7.1"))
+    implementation("org.apache.kafka:kafka-clients:2.8.2")
+    testImplementation(platform("org.junit:junit-bom:5.14.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("io.mockk:mockk:1.11.0")
+    testImplementation("io.mockk:mockk:1.14.11")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
 }
 
