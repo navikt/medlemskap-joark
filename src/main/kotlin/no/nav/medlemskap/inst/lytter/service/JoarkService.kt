@@ -47,6 +47,7 @@ class JoarkService(private val configuration: Configuration) {
                 if (response["status"]?.asInt() == 409) {
                     log.info("Journalpost med Nav-call-id ${record.key} er ferdigstilt. Skal ikke arkiveres på nytt.")
                 } else {
+                    log.info("Dokument er opprettet for callId ${record.key}")
                     record.logDokumentLagretIJoark(medlemskapVurdering)
                 }
                 //publiser til topic ZZZ
