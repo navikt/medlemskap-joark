@@ -67,6 +67,7 @@ dependencies {
     implementation("org.apache.kafka:kafka-clients:2.8.2")
     testImplementation(platform("org.junit:junit-bom:5.14.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("io.mockk:mockk:1.14.11")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
 }
