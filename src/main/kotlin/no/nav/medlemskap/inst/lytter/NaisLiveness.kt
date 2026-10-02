@@ -7,8 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.micrometer.prometheus.PrometheusMeterRegistry
-import io.prometheus.client.exporter.common.TextFormat
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
@@ -60,7 +59,7 @@ fun naisLiveness(consumeJob: Job) = embeddedServer(Netty, applicationEngineEnvir
                 call.respondText("Ready!", ContentType.Text.Plain, HttpStatusCode.OK)
             }
             get("/metrics") {
-                call.respondTextWriter(ContentType.parse(TextFormat.CONTENT_TYPE_004)) {
+                call.respondTextWriter(ContentType.parse(PROMETHEUS_TEXT_CONTENT_TYPE)) {
                     writeMetrics004(this, Metrics.registry)
                 }
             }
@@ -102,10 +101,12 @@ suspend fun callPdfGen(): Componenthealth {
 }
 
 
+const val PROMETHEUS_TEXT_CONTENT_TYPE = "text/plain; version=0.0.4; charset=utf-8"
+
 suspend fun writeMetrics004(writer: Writer, registry: PrometheusMeterRegistry) {
     withContext(Dispatchers.IO) {
         kotlin.runCatching {
-            TextFormat.write004(writer, registry.prometheusRegistry.metricFamilySamples())
+            writer.write(registry.scrape(PROMETHEUS_TEXT_CONTENT_TYPE))
         }
     }
 }
