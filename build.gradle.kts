@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 val ktorVersion = "2.3.13"
 val konfigVersion = "1.6.10.0"
 val jacksonVersion = "2.22.3"
@@ -6,13 +8,13 @@ val micrometerVersion = "1.17.1"
 val kotlinLoggerVersion = "1.12.5"
 val resilience4jVersion = "1.7.1"
 val logstashVersion = "8.1"
-val logbackVersion = "1.6.4"
+val logbackVersion = "1.6.5"
 val httpClientVersion = "4.5.14"
 val threetenVersion = "1.10.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
-    kotlin("jvm") version "2.1.21"
+    kotlin("jvm") version "2.4.20"
     application
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -74,11 +76,15 @@ dependencies {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "20"
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_20)
+            optIn.add("kotlin.RequiresOptIn")
+        }
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "20"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_20)
+        }
     }
     shadowJar {
         archiveBaseName.set("app")
