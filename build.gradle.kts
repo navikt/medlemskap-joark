@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 val ktorVersion = "2.3.13"
 val konfigVersion = "1.6.10.0"
 val jacksonVersion = "2.22.3"
@@ -74,11 +76,15 @@ dependencies {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "20"
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_20)
+            optIn.add("kotlin.RequiresOptIn")
+        }
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "20"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_20)
+        }
     }
     shadowJar {
         archiveBaseName.set("app")
