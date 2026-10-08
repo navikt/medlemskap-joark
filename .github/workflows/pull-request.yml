@@ -1,18 +1,19 @@
 name: build
 permissions:
   contents: "read"
-  id-token: "write"
-  packages: "write"
 on: [ pull_request ]
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+      checks: "write"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: test and build
         uses: actions/setup-java@v4.9.1
         with:
@@ -32,8 +33,6 @@ jobs:
         id: docker-push
         with:
           team: medlemskap # required
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
       - name: Post failures to Slack
         if: failure()
         run: |
@@ -48,12 +47,17 @@ jobs:
     name: Deploy to Preprod
     needs: build_and_push
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
     steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
-          IMAGE: ${{ needs.build_and_push.outputs.image }}
-          TELEMETRY: ${{ needs.build_and_push.outputs.telemetry }}
+      - uses: actions/checkout@v6
+      - uses: nais/setup@v1
+        with:
+          team: medlemskap
+      - name: Deploy to dev-gcp
+        run: |
+          nais apply .nais/nais.yaml \
+            --environment dev-gcp \
+            --set spec.image="${{ needs.build_and_push.outputs.image }}" \
+            --wait
