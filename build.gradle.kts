@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val ktorVersion = "2.3.13"
-val nettyVersion = "4.1.139.Final"
+val nettyVersion = "4.2.19.Final"
 val konfigVersion = "1.6.10.0"
 val jacksonVersion = "2.22.3"
 val jacksonAnnotationsVersion = "2.22"
@@ -15,7 +15,7 @@ val threetenVersion = "1.10.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
-    kotlin("jvm") version "2.4.20"
+    kotlin("jvm") version "2.4.21"
     application
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
