@@ -11,7 +11,7 @@ val resilience4jVersion = "1.7.1"
 val logstashVersion = "8.1"
 val logbackVersion = "1.6.5"
 val httpClientVersion = "4.5.14"
-val threetenVersion = "1.10.0"
+val threetenVersion = "1.11.0"
 val mainClass = "no.nav.medlemskap.inst.lytter.ApplicationKt"
 
 plugins {
